@@ -1,0 +1,31 @@
+{
+	"short_name": "Naaz",
+  "name": "Naaz",
+  "start_url": "/naaz/",
+  "theme_color": "#052c65",
+  "background_color": "#fff",
+  "display": "standalone",
+  "prefer_related_applications": true,
+  "icons": [
+    {
+      "src": "assets/icon.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "assets/icon.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "assets/icon.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "assets/icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}
