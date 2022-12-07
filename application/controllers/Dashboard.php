@@ -35,7 +35,7 @@ class Dashboard extends CI_Controller {
 			$date = $_SESSION['filter_date'];
 		}
 		else {
-			$date = '';
+			$date = date('Y-m-d');
 		}
 		
 		$purchaes = $this->Dashboard_model->flterByDate('nz_purchase',$date);

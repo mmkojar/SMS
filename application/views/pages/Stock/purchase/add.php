@@ -15,10 +15,10 @@
                                 <thead>
                                     <tr>    
                                         <th>Vendor Name</th>
-                                        <th>Department Name</th>
-                                        <th>Item Name</th>
+                                        <th>Item</th>
+                                        <th>Sub-Item</th>
                                         <th>Qty</th>
-                                        <th>Select Unit</th>
+                                        <!-- <th>Select Unit</th> -->
                                         <th>Purchase Rate</th>
                                         <!-- <th>Selling Rate</th> -->
                                         <th>Date</th>
@@ -51,10 +51,10 @@
             var html = '';
             html += '<tr>';
             html += '<td><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
-            html += '<td><select class="form-control dpt_id select2" data-sub_item='+count+' name="dpt_id[]" id="dpt_id_' + count + '"><option value="" selected>--select--</option><?php print_r($departs) ?></select></td>';
-            html += '<td><select class="form-control item_name select2" data-sub_item='+count+' name="item_name[]" id="item_name_' + count + '"><option value="" selected>--select--</option><?php print_r($items) ?></select></td>';
+            html += '<td><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_' + count + '"><option value="" selected>--select--</option><?php print_r($items) ?></select></td>';
+            html += '<td><select class="form-control sub_item_id select2" data-sub_item='+count+' name="sub_item_id[]" id="sub_item_id_' + count + '"></select></td>';
             html += '<td><input type="number" min="1" id="qty_' + count + '" data-sub_item='+count+' name="qty[]" class="form-control qty" placeholder=""/>';
-            html += '<td><select class="form-control unit" data-sub_item='+count+' name="unit[]" id="unit_' + count + '"><option value="">Select</option><option value="GRAM">GRAM</option><option value="KG">KG</option><option value="LTR">LTR</option><option value="BOX">BOX</option><option value="PCS">PCS</option></select></td>';
+            // html += '<td><select class="form-control unit" data-sub_item='+count+' name="unit[]" id="unit_' + count + '"><option value="">Select</option><option value="GRAM">GRAM</option><option value="KG">KG</option><option value="LTR">LTR</option><option value="BOX">BOX</option><option value="PCS">PCS</option></select></td>';
             html += '<td><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';
             // html += '<td><input type="number" min="0" id="selling_rate_' + count + '" data-sub_item='+count+' name="selling_rate[]" class="form-control selling_rate" placeholder=""/>';
             html += '<td><input type="date" id="date_' + count + '" name="date[]" data-sub_item='+count+' class="form-control date" placeholder=""/>';
@@ -90,14 +90,28 @@
             } 
         });
 
-        $(document).on('change', '.item_name', function(){            
+        $(document).on('change', '.item_id', function(){
             var sub_item = $(this).data('sub_item');
 			
 			var dropdownvalue = $(this).val();
-			$(".item_name").not(this).find('option[value="' + dropdownvalue + '"]').remove();
+			/* $(".item_id").not(this).find('option[value="' + dropdownvalue + '"]').remove();
             
             var today = new Date();
-            document.querySelector("#date_"+sub_item).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);            
+            document.querySelector("#date_"+sub_item).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2); */
+
+            $.ajax({
+				url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
+                method:"GET",
+                dataType:'json',
+                success:function(res)
+                {         
+                    var html = '';                    
+                    for(var i in res) {
+                        html += `<option value="${res[i].id}">${res[i].name}</option>`;
+                    }
+                    $('#sub_item_id_'+sub_item).html(html);
+                }
+            })
         });
 		
         
@@ -105,7 +119,7 @@
 
             e.preventDefault();
             var errors = '';
-            $('.vendor_id,.dpt_id,.item_name,.unit,.qty,.rate,.date').each(function(){
+            $('.vendor_id,.sub_item_id,.item_id,.qty,.rate,.date').each(function(){
                 var sub_item = $(this).data('sub_item');
                 if($(this).val() == '')
                 {

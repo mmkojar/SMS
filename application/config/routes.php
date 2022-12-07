@@ -61,14 +61,14 @@ $route['purchase/add'] = 'Stock/purchase/add';
 $route['purchase/insert'] = 'Stock/purchase/insert';
 $route['purchase/vendorsApi'] = 'Stock/purchase/VendorsApi';
 $route['purchase/edit/(:any)'] = 'Stock/purchase/edit/$1';
-$route['purchase/delete/(:any)/(:any)'] = 'Stock/purchase/delete/$1/$2';
+$route['purchase/delete/(:any)/(:any)/(:any)'] = 'Stock/purchase/delete/$1/$2/$3';
 
 $route['selling'] = 'Stock/selling';
 $route['selling/add'] = 'Stock/selling/add';
 $route['selling/insert'] = 'Stock/selling/insert';
 $route['selling/vapi'] = 'Stock/selling/vendorsApi';
 $route['selling/edit/(:any)'] = 'Stock/selling/edit/$1';
-$route['selling/delete/(:any)/(:any)/(:any)'] = 'Stock/selling/delete/$1/$2/$3';
+$route['selling/delete/(:any)/(:any)/(:any)/(:any)'] = 'Stock/selling/delete/$1/$2/$3/$4';
 
 $route['instock'] = 'Stock/InStock';
 

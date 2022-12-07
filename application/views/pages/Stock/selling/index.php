@@ -13,10 +13,11 @@
                     <thead>
                         <tr>
                             <th>Sr.No</th>
+                            <th>Vendor Name</th>
                             <th>Item Name</th>
-                            <th>Department Name</th>
+                            <th>Sub-Item</th>
                             <th>Qty Sell</th>
-                            <th>Unit</th>
+                            <!-- <th>Unit</th> -->
                             <th>Selling Rate</th>
                             <th>Total Amount</th>
                             <!-- <th>Outlet</th> -->
@@ -29,25 +30,26 @@
                         <?php foreach ($sellings as $row):?>
                         <tr>
                             <td><?php echo $sr_no; ?></td>
+                            <td><?php echo $row->vendor_name ?></td>
                             <td><?php echo $row->item_name ?></td>
                             <td><?php echo $row->depart_name; ?></td>
                             <td class="font-weight-bold"><?php echo $row->qty ?></td>
-                            <td><?php echo $row->unit ?></td>
+                            <!-- <td><s?php echo $row->unit ?></td> -->
                             <td><?php echo $row->rate ?></td>
                             <td><?php echo $row->total_amount ?></td>
-                            <!-- <td><?php echo $row->outlet ?></td> -->
+                            <!-- <td><s?php echo $row->outlet ?></td> -->
                             <td><?php echo $row->date ?></td>
                             <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('selling/edit/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;
-                            <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('selling/delete/'.$row->id.'/'.$row->item_id.'/'.$row->qty) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
+                            <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('selling/delete/'.$row->id.'/'.$row->item_id.'/'.$row->sub_item_id.'/'.$row->qty) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                         </tr>
                         <?php $sr_no++; ?>
                         <?php endforeach;?>
                     </tbody>
 					<tfoot>
 						<tr>
-							<th colspan="3" style="text-align:right">Total:</th>
+							<th colspan="4" style="text-align:right">Total:</th>
 							<th></th>
-							<th colspan="5"></th>
+							<th colspan="4"></th>
 						</tr>
 					</tfoot>
                 </table>
@@ -63,12 +65,12 @@
     $(document).ready(function() {
         
         $('#selling_tab').DataTable({
-            order: [[1,'desc']],
+            order: [[2,'desc']],
             rowGroup: {
-                dataSrc: [1]
+                dataSrc: [2]
             },
             columnDefs: [{
-                targets: [1],
+                targets: [2],
                 visible: false
             }],
             dom: 'lBfrtip',
@@ -86,7 +88,7 @@
 	
 				// Total over all pages
 				total = api
-					.column(3)
+					.column(4)
 					.data()
 					.reduce(function (a, b) {
 						return intVal(a) + intVal(b);
@@ -94,14 +96,14 @@
 	
 				// Total over this page
 				pageTotal = api
-					.column(3, { page: 'current' })
+					.column(4, { page: 'current' })
 					.data()
 					.reduce(function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0);
 	
 				// Update footer
-				$(api.column(3).footer()).html(pageTotal + ' ( ' + total + ' total)');
+				$(api.column(4).footer()).html(pageTotal + ' ( ' + total + ' total)');
 			},
         });
     })

@@ -7,12 +7,25 @@
         </div>
         <div class="card-body">
             <?php echo form_open(uri_string()); ?>
-                <div class="row">                 
+                <div class="row">  
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Item Name</label>
+                            <select name="item_id" class="form-control">
+                                <option value="">Select Item</option>
+                                <?php foreach($items as $item) : ?>
+                                    <?php isset($department['item_id']) ? ($selected = ($department['item_id'] == $item->id) ? 'selected' : '') : $selected = set_select('item_id',(isset($department['id']) ? $department['id'] : $item->id )) ; ?>
+                                    <option value="<?php echo $item->id ?>"  <?php echo $selected ?>><?php echo $item->name ?></option>
+                                <?php endforeach ?>
+                            </select>                            
+                            <p class="text-danger"><?php echo form_error('item_id'); ?></p>
+                        </div>
+                    </div>               
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" class="form-control"  
-                            value="<?php echo isset($department['name']) ? $department['name'] : '' ?>">
+                            value="<?php echo isset($department['name']) ? $department['name'] : set_value('name') ?>">
                             <p class="text-danger"><?php echo form_error('name'); ?></p>
                         </div>
                     </div>

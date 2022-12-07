@@ -47,12 +47,12 @@ class Purchase extends CI_Controller {
     	}
     	$this->data['vendors'] = $output;
 
-    	$departs = $this->Crud_model->get('nz_department','');
+    	/* $departs = $this->Crud_model->get('nz_department','');
     	$output1 = '';
     	foreach($departs as $row) {
     		 $output1 .= '<optgroup><option value="'.$row->id.'">'.trim($row->name).'</option></optgroup>';
     	}
-    	$this->data['departs'] = $output1;
+    	$this->data['departs'] = $output1; */
 
     	$items = $this->Crud_model->get('nz_items','');
     	$output2 = '';
@@ -77,9 +77,9 @@ class Purchase extends CI_Controller {
 
 		    		$additional_data = [
 		    			'vendor_id' => $_POST["vendor_id"][$i],
-		    			'dpt_id' => $_POST["dpt_id"][$i] ? $_POST["dpt_id"][$i] : '0',
-		    			'item_id' => $_POST["item_name"][$i],
-		    			'unit' => $_POST["unit"][$i],
+		    			'item_id' => $_POST["item_id"][$i],
+		    			'sub_item_id' => $_POST["sub_item_id"][$i] ? $_POST["sub_item_id"][$i] : '0',
+		    			// 'unit' => $_POST["unit"][$i],
 		    			'qty' => $_POST["qty"][$i],
 		    			'rate' => $_POST["rate"][$i],
 		    			'total_amount' => ($_POST["qty"][$i]*$_POST["rate"][$i]),
@@ -88,29 +88,32 @@ class Purchase extends CI_Controller {
 		    		];
 										
 		    		$this->Crud_model->insert('nz_purchase',$additional_data);
-					$getavail = $this->Crud_model->getByItemId('nz_available',$_POST["item_name"][$i],'item_id');
-
-					$getpurchase = $this->Crud_model->getByItemId('nz_purchase',$_POST["item_name"][$i],'item_id');
+					$getavail = $this->Crud_model->getStockAvail($_POST["item_id"][$i],$_POST["sub_item_id"][$i]);
+					
+					/* $getpurchase = $this->Crud_model->getByItemId('nz_purchase',$_POST["item_id"][$i],'item_id');
 					
 					$sum_qty = 0;
 					$sum_totamont = 0;
 					foreach ($getpurchase as $value) {
 						$sum_qty += $value->qty;
 						$sum_totamont += $value->total_amount;
-					}
+					} */
 					if($getavail) {
-						$this->Crud_model->updateById('nz_available',$_POST["item_name"][$i],[
+						$this->Crud_model->updateStockByIds($_POST["item_id"][$i],$_POST["sub_item_id"][$i],[
+			    			'pqty' => $getavail[0]->pqty + $_POST["qty"][$i],
 			    			'qty' => $getavail[0]->qty + $_POST["qty"][$i],
-							'rate' => number_format(($sum_totamont / $sum_qty),2),
+							// 'rate' => number_format(($sum_totamont / $sum_qty),2),
 		    				'updated_at' => date('Y-m-d h:i:s'),
 		    			]);
 					}
 					else {
-						$this->Crud_model->insert('nz_available',[
-		    				'item_id' => $_POST["item_name"][$i],
-		    				'unit' => $_POST["unit"][$i],
+						$this->Crud_model->insert('sms_available',[
+		    				'item_id' => $_POST["item_id"][$i],
+		    				'sub_item_id' => $_POST["sub_item_id"][$i],
+		    				// 'unit' => $_POST["unit"][$i],
+			    			'pqty' => $_POST["qty"][$i],
 			    			'qty' => $_POST["qty"][$i],
-			    			'rate' => (($_POST["qty"][$i] * $_POST["rate"][$i]) / $_POST["qty"][$i]),
+			    			// 'rate' => (($_POST["qty"][$i] * $_POST["rate"][$i]) / $_POST["qty"][$i]),
 			    			'date' => $_POST["date"][$i],
 		    				'created_at' => date('Y-m-d h:i:s'),
 		    			]);
@@ -122,23 +125,6 @@ class Purchase extends CI_Controller {
     	print_r(json_encode(['status'=>'success','msg'=>'Record Added Successfully']));
     }
 
-    public function delete($id, $itemId) {
-    			
-		$checkSelling = $this->Crud_model->getByItemId('nz_selling',$itemId,'item_id');
-		
-		if(count($checkSelling) > 0) {
-			$this->session->set_flashdata('error', 'Items Already sold Cannot be Deleted');
-			redirect("purchase", 'refresh');
-		}
-		else {
-			$this->Crud_model->delete('nz_purchase',$id);
-			$this->Crud_model->deleteById('nz_available',$itemId);
-			$this->session->set_flashdata('success', 'Record Deleted Successfully');
-			redirect("purchase", 'refresh');
-		}
-    	
-    }
-
     public function edit($id) {
                     
         $this->form_validation->set_rules('rate','Purchase Rate','required');
@@ -147,9 +133,9 @@ class Purchase extends CI_Controller {
 		{
 			 $additional_data = [
 				'vendor_id' => $this->input->post("vendor_id"),
-				'dpt_id' => $this->input->post("dpt_id") ? $this->input->post("dpt_id") : '0',
-				// 'item_id' => $this->input->post("item_name"),
-				'unit' => $this->input->post("unit"),
+				'sub_item_id' => $this->input->post("sub_item_id") ? $this->input->post("sub_item_id") : '0',
+				// 'item_id' => $this->input->post("item_id"),
+				// 'unit' => $this->input->post("unit"),
 				'qty' => $this->input->post("qty"),
 				'rate' => $this->input->post("rate"),
 				'total_amount' => $this->input->post("qty") * $this->input->post("rate"),
@@ -157,8 +143,8 @@ class Purchase extends CI_Controller {
 				'updated_at' => date('Y-m-d h:i:s'),
 			];
 			$done = $this->Crud_model->update('nz_purchase',$id,$additional_data);	
-			if($done) {
-					$getpurchase = $this->Crud_model->getByItemId('nz_purchase',$_POST["item_name"],'item_id');
+			/* if($done) {
+					$getpurchase = $this->Crud_model->getByItemId('nz_purchase',$_POST["item_id"],'item_id');
 					
 					$sum_qty = 0;
 					$sum_totamont = 0;
@@ -166,12 +152,12 @@ class Purchase extends CI_Controller {
 						$sum_qty += $value->qty;
 						$sum_totamont += $value->total_amount;
 					}
-					$this->Crud_model->updateById('nz_available',$this->input->post("item_name"),[
-	    				'unit' => $this->input->post("unit"),
+					$this->Crud_model->updateById('sms_available',$this->input->post("item_id"),[
+	    				// 'unit' => $this->input->post("unit"),
 						'rate' => number_format(($sum_totamont / $sum_qty),2),
 	    				'updated_at' => date('Y-m-d h:i:s'),
 	    			]);
-			}
+			} */
 			$this->session->set_flashdata('success', 'Record Updated Successfully');
 			redirect("purchase", 'refresh');
 		}
@@ -191,6 +177,32 @@ class Purchase extends CI_Controller {
 			$this->_render_page('pages/Stock/purchase/' . DIRECTORY_SEPARATOR . 'edit', $this->data);
 		}
     }
+	
+
+    public function delete($id, $itemId, $subid) {
+		
+		$query = $this->db->query('SELECT * FROM `nz_selling` WHERE item_id='.$itemId.' && sub_item_id='.$subid);
+		$checkSelling = $query->num_rows();
+		// $checkSelling = $this->Crud_model->getByItemId('nz_selling',$itemId,'item_id');
+		
+		if($checkSelling > 0) {
+			$this->session->set_flashdata('error', 'Items Already sold Cannot be Deleted');
+			redirect("purchase", 'refresh');
+		}
+		else {
+			$this->Crud_model->delete('nz_purchase',$id);
+			$this->db->query('DELETE FROM `sms_available` WHERE item_id='.$itemId.' && sub_item_id='.$subid);
+			$this->session->set_flashdata('success', 'Record Deleted Successfully');
+			redirect("purchase", 'refresh');
+		}
+    	
+    }
+
+	public function getSubItemOnChange($id) {
+		$query = $this->db->query('SELECT * FROM `nz_department` WHERE item_id='.$id);
+		$res = $query->result_array();
+		print_r(json_encode($res));
+	}
     
 	public function _get_csrf_nonce()
 	{

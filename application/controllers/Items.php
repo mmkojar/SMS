@@ -38,29 +38,28 @@ class Items extends CI_Controller {
 
 	public function form($id = FALSE) {
 
-        $this->data['title'] = "Add Items";
-
 		$id ? $this->form_validation->set_rules('name','Name','trim|required')
 		:  $this->form_validation->set_rules('name','Name','trim|required|is_unique[nz_items.name]');
 
-        $this->form_validation->set_rules('min_qty','Min Quantity','trim|required');
-
+        // $this->form_validation->set_rules('min_qty','Min Quantity','trim|required');
+		$inputname = trim($this->input->post('name'));
 		if ($this->form_validation->run() === TRUE)
 		{						
 			$additional_data = [
-				'name' => trim($this->input->post('name')),
-				'min_qty' => trim($this->input->post('min_qty')),
+				'name' => $inputname,
+				// 'min_qty' => trim($this->input->post('min_qty')),
 			];
 
 			if($id) {
 				
+				// $query = $this->db->query('SELECT * FROM `nz_items` WHERE nz_items.name='.$inputname);
 				$this->db->select('nz_items.*');
 				$this->db->from('nz_items');
 				$this->db->where('nz_items.name', $this->input->post('name'));
 				$query=$this->db->get();
-				$res =  $query->row();
+				$res =  $query->row_array();
 				if($res) {
-					if($res->name !== $this->input->post('hidden_item')) {
+					if($res['name'] !== $this->input->post('hidden_item')) {
 						$this->session->set_flashdata('error', 'Item Name Already Exists');
 						redirect("items/form/".$id, 'refresh');						
 					}
@@ -78,7 +77,7 @@ class Items extends CI_Controller {
 				$this->Crud_model->insert('nz_items',$additional_data);
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
-				redirect("Items/form", 'refresh');
+				redirect("Items", 'refresh');
 			}
 		}
 		else

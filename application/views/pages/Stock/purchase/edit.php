@@ -27,15 +27,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="dpt_id">Department</label>
-                            <select name="dpt_id" class="form-control">
+                            <label for="dsub_item_id">Sub-Item</label>
+                            <select name="dsub_item_id" class="form-control" disabled>
                                 <?php foreach($departs as $row): ?>
                                     <option value="<?php echo $row->id ?>" 
-                                        <?php echo ($row->id == $purchase['dpt_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
+                                        <?php echo ($row->id == $purchase['sub_item_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
+                        <input type="hidden" name="sub_item_id" value="<?php echo $purchase['sub_item_id'] ?>">
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
@@ -50,18 +51,18 @@
                         </div>
 						<input type="hidden" name="item_name" value="<?php echo $purchase['item_id'] ?>">
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group">
                             <label for="size">Unit</label>
                             <select class="form-control" name="unit" id="unit">
-                                <option value="GRAM" <?php echo ($purchase['unit'] == 'GRAM') ? 'selected' : '' ?>>GRAM</option>
-                                <option value="KG" <?php echo ($purchase['unit'] == 'KG') ? 'selected' : '' ?>>KG</option>
-                                <option value="LTR" <?php echo ($purchase['unit'] == 'LTR') ? 'selected' : '' ?>>LTR</option>
-                                <option value="BOX" <?php echo ($purchase['unit'] == 'BOX') ? 'selected' : '' ?>>BOX</option>
-                                <option value="PCS" <?php echo ($purchase['unit'] == 'PCS') ? 'selected' : '' ?>>PCS</option>
+                                <option value="GRAM" <s?php echo ($purchase['unit'] == 'GRAM') ? 'selected' : '' ?>>GRAM</option>
+                                <option value="KG" <sphp echo ($purchase['unit'] == 'KG') ? 'selected' : '' ?>>KG</option>
+                                <option value="LTR" <s?php echo ($purchase['unit'] == 'LTR') ? 'selected' : '' ?>>LTR</option>
+                                <option value="BOX" <s?php echo ($purchase['unit'] == 'BOX') ? 'selected' : '' ?>>BOX</option>
+                                <option value="PCS" <s?php echo ($purchase['unit'] == 'PCS') ? 'selected' : '' ?>>PCS</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="qty">Qty</label>

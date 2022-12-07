@@ -93,7 +93,7 @@
                         
                     var helper = {};
                     var result = res.reduce(function(r, o) {
-                        var key = o.item_id;
+                        var key = o.item_id + '-' + o.sub_item_id;
                         // var key = o.vendor_id + '-' + o.date;
 
                         if(!helper[key]) {
@@ -116,6 +116,7 @@
                             <tr>
                                 <th>Sr.No</th>
                                 <th>Item Name</th>
+                                <th>Sub-Item</th>
                                 <th>Total Qty.</th>
                                 <th>Total Amount</th>
                                 <th>Month</th>
@@ -129,6 +130,7 @@
                             <tr>
                             <td>${sr_no}</td>
                             <td>${result[i].item_name}</td>
+                            <td>${result[i].depart_name}</td>
                             <td>${result[i].qty}</td>
                             <td>${result[i].total_amount}</td>
                             <td>${mt ? months[Number(mt)-1] : '-'}</td>
@@ -142,8 +144,9 @@
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th style="text-align:right">Total:</th>
                                 <th></th>
+                                <th></th>
+                                <th style="text-align:right">Total:</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -166,7 +169,7 @@
                 
                             // Total over all pages
                             total = api
-                                .column(3)
+                                .column(4)
                                 .data()
                                 .reduce(function (a, b) {
                                     return intVal(a) + intVal(b);
@@ -174,14 +177,14 @@
                 
                             // Total over this page
                             pageTotal = api
-                                .column(3, { page: 'current' })
+                                .column(4, { page: 'current' })
                                 .data()
                                 .reduce(function (a, b) {
                                     return intVal(a) + intVal(b);
                                 }, 0);
                 
                             // Update footer
-                            $(api.column(3).footer()).html('<b>'+pageTotal+'</b>' + ' ( <b>' + total + ' total</b>)');
+                            $(api.column(4).footer()).html('<b>'+pageTotal+'</b>' + ' ( <b>' + total + ' total</b>)');
                         },
                     });
 

@@ -23,11 +23,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="dpt_id">Department</label>
-                            <select name="dpt_id" class="form-control">
+                            <label for="sub_item_id">Department</label>
+                            <select name="sub_item_id" class="form-control">
                                 <?php foreach($departs as $row): ?>
                                     <option value="<?php echo $row->id ?>" 
-                                        <?php echo ($row->id == $selling['dpt_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
+                                        <?php echo ($row->id == $selling['sub_item_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

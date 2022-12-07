@@ -29,7 +29,7 @@ class Department extends CI_Controller {
 
 	public function index() {
 
-		$this->data['title'] = 'Department';            
+		$this->data['title'] = 'Sub-Items';            
 
 		$this->data['departments'] = $this->Crud_model->get('nz_department','');
 		
@@ -38,30 +38,32 @@ class Department extends CI_Controller {
 
 	public function form($id = FALSE) {
 
-        $this->data['title'] = "Add Department";
+        $this->data['title'] = "Add Sub-Items";
 
+		$this->form_validation->set_rules('item_id','Item','trim|required');
+		
 		$id ? $this->form_validation->set_rules('name','Name','trim|required')
 		:  $this->form_validation->set_rules('name','Name','trim|required|is_unique[nz_department.name]');
 
 		if ($this->form_validation->run() === TRUE)
 		{						
 			$additional_data = [
+				'item_id' => trim($this->input->post('item_id')),
 				'name' => trim($this->input->post('name')),
 			];
 
 			if($id) {
 				$this->db->select('nz_department.*');
 				$this->db->from('nz_department');
-				$this->db->where('nz_department.name', $this->input->post('name'));
+				$this->db->where(['nz_department.name'=> $this->input->post('name'),'nz_department.item_id'=>$this->input->post('item_id')]);
 				$query=$this->db->get();
 				$res =  $query->row();
 				if($res) {
 					if($res->name !== $this->input->post('hidden_item')) {
-						$this->session->set_flashdata('error', 'Department Name Already Exists');
+						$this->session->set_flashdata('error', 'Department Name Already Exists with same Item');
 						redirect("department/form/".$id, 'refresh');						
 					}
-				}
-
+				}				
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
 
 				$this->Crud_model->update('nz_department',$id,$additional_data);
@@ -75,20 +77,20 @@ class Department extends CI_Controller {
 				$this->Crud_model->insert('nz_department',$additional_data);
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
-				redirect("department/form", 'refresh');
+				redirect("department", 'refresh');
 			}
 		}
 		else
 		{			           
 			$this->data['csrf'] = $this->_get_csrf_nonce();
-
+			$this->data['items'] = $this->Crud_model->get('nz_items');
 			if($id) {
-				$this->data['title'] = "Edit Department";   
+				$this->data['title'] = "Edit Sub-Items";
 				$this->data['department'] = $this->Crud_model->get('nz_department',$id);
 
 			}	
 			else {
-				$this->data['title'] = 'Add Department';
+				$this->data['title'] = 'Add Sub-Items';
 				
 			}			
 			$this->_render_page('pages/Department/' . DIRECTORY_SEPARATOR . 'form', $this->data);
@@ -97,9 +99,9 @@ class Department extends CI_Controller {
 
     public function delete($id) {
     	
-		$query = $this->db->query('SELECT * FROM `nz_purchase` WHERE dpt_id='.$id);
-		$count = $query->num_rows();
-		if($count > 0) {
+		$del = $this->Crud_model->getByItemId('nz_purchase',$id,'sub_item_id');
+		
+		if(count($del) > 0) {
 			$this->session->set_flashdata('error', 'Department Already In-use Cannot be Deleted');
 			redirect("department", 'refresh');
 		}

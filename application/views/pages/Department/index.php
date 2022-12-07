@@ -13,9 +13,9 @@
                     <thead>
                         <tr>
                             <th>Sr.No</th>
-                            <th>Name</th>
+                            <th>Item Name</th>
+                            <th>Sub-Item</th>
                             <th>Created At</th>
-                            <th>Updated At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -24,9 +24,9 @@
                         <?php foreach ($departments as $row):?>
                         <tr>
                             <td><?php echo $sr_no; ?></td>
+                            <td><?php echo $row->item_name ?></td>
                             <td><?php echo $row->name ?></td>
                             <td><?php echo $row->created_at ?></td>
-                            <td><?php echo $row->updated_at ?></td>
                             <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('department/form/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;<a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('department/delete/'.$row->id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                         </tr>
                         <?php $sr_no++; ?>

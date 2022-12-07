@@ -1,0 +1,494 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Dec 07, 2022 at 02:01 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 7.4.29
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `stock_management_system`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `groups`
+--
+
+CREATE TABLE `groups` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Administrator'),
+(3, 'user', 'User');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_attempts`
+--
+
+CREATE TABLE `login_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `login_attempts`
+--
+
+INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
+(20, '183.87.80.104', 'jameel@hne.com', '2022-06-15 06:06:40'),
+(22, '103.44.50.129', 'test@admin.com', '2022-06-15 08:06:16'),
+(23, '::1', 'test@gmail.com', '2022-06-16 10:06:50'),
+(24, '::1', 'test@gmail.com', '2022-06-16 10:06:35'),
+(25, '::1', 'test@gmail.com	', '2022-07-06 07:07:17'),
+(26, '::1', 'test@gmail.com', '2022-07-06 07:07:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nz_department`
+--
+
+CREATE TABLE `nz_department` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nz_department`
+--
+
+INSERT INTO `nz_department` (`id`, `item_id`, `name`, `created_at`, `updated_at`) VALUES
+(13, 204, 'S20', '2022-12-06 02:21:30', '2022-12-06 04:00:39'),
+(14, 206, 'Iphone 12', '2022-12-06 02:22:10', '2022-12-06 04:00:04'),
+(15, 204, 'S22', '2022-12-06 04:00:33', '2022-12-06 04:05:36'),
+(16, 206, 'Iphone 11', '2022-12-06 04:07:54', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nz_items`
+--
+
+CREATE TABLE `nz_items` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `min_qty` bigint(20) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nz_items`
+--
+
+INSERT INTO `nz_items` (`id`, `name`, `min_qty`, `created_at`, `updated_at`) VALUES
+(204, 'Samsung', NULL, '2022-12-06 12:35:54', '2022-12-06 02:21:12'),
+(206, 'Iphone', NULL, '2022-12-06 12:42:25', '2022-12-06 02:21:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nz_purchase`
+--
+
+CREATE TABLE `nz_purchase` (
+  `id` int(11) NOT NULL,
+  `vendor_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `sub_item_id` int(11) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `qty` bigint(20) DEFAULT NULL,
+  `rate` varchar(50) DEFAULT NULL,
+  `total_amount` varchar(50) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `is_sell` enum('1','0') DEFAULT '0',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nz_purchase`
+--
+
+INSERT INTO `nz_purchase` (`id`, `vendor_id`, `item_id`, `sub_item_id`, `unit`, `qty`, `rate`, `total_amount`, `date`, `is_sell`, `created_at`, `updated_at`) VALUES
+(31, 32, 204, 13, NULL, 20, '1', '20', '2022-12-07', '0', '2022-12-07 03:56:32', NULL),
+(32, 32, 206, 16, NULL, 10, '2', '20', '2022-12-07', '0', '2022-12-07 03:56:32', NULL),
+(34, 32, 206, 16, NULL, 4, '4', '16', '2022-12-07', '0', '2022-12-07 04:12:25', NULL),
+(36, 31, 204, 15, NULL, 13, '11', '143', '2022-12-07', '0', '2022-12-07 04:21:31', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nz_selling`
+--
+
+CREATE TABLE `nz_selling` (
+  `id` int(11) NOT NULL,
+  `vendor_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `sub_item_id` int(11) DEFAULT 0,
+  `unit` varchar(50) DEFAULT NULL,
+  `qty` bigint(20) DEFAULT NULL,
+  `rate` varchar(50) DEFAULT NULL,
+  `total_amount` varchar(50) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nz_selling`
+--
+
+INSERT INTO `nz_selling` (`id`, `vendor_id`, `item_id`, `sub_item_id`, `unit`, `qty`, `rate`, `total_amount`, `date`, `created_at`, `updated_at`) VALUES
+(30, 32, 206, 16, NULL, 2, '6', '12', '2022-12-07', '2022-12-07 04:01:16', NULL),
+(33, 32, 204, 13, NULL, 7, '6', '42', '2022-12-07', '2022-12-07 04:13:19', NULL),
+(34, 32, 204, 15, NULL, 2, '13', '26', '2022-12-08', '2022-12-07 04:22:02', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nz_vendors`
+--
+
+CREATE TABLE `nz_vendors` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nz_vendors`
+--
+
+INSERT INTO `nz_vendors` (`id`, `name`, `phone`, `address`, `created_at`, `updated_at`) VALUES
+(31, 'Altor tech', '', '', '2022-12-06 03:20:24', NULL),
+(32, 'Perfect center', '', '', '2022-12-06 03:20:44', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sms_available`
+--
+
+CREATE TABLE `sms_available` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `sub_item_id` int(11) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `pqty` bigint(20) DEFAULT 0,
+  `sqty` bigint(20) DEFAULT 0,
+  `qty` bigint(20) DEFAULT 0,
+  `rate` varchar(50) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sms_available`
+--
+
+INSERT INTO `sms_available` (`id`, `item_id`, `sub_item_id`, `unit`, `pqty`, `sqty`, `qty`, `rate`, `date`, `created_at`, `updated_at`) VALUES
+(13, 204, 13, NULL, 20, 7, 13, NULL, '2022-12-07', '2022-12-07 03:56:32', '2022-12-07 04:17:17'),
+(14, 206, 16, NULL, 14, 2, 12, NULL, '2022-12-07', '2022-12-07 03:56:32', '2022-12-07 04:17:00'),
+(17, 204, 15, NULL, 13, 2, 11, NULL, '2022-12-07', '2022-12-07 04:21:31', '2022-12-07 04:22:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `activation_selector` varchar(255) DEFAULT NULL,
+  `activation_code` varchar(255) DEFAULT NULL,
+  `forgotten_password_selector` varchar(255) DEFAULT NULL,
+  `forgotten_password_code` varchar(255) DEFAULT NULL,
+  `forgotten_password_time` int(11) UNSIGNED DEFAULT NULL,
+  `remember_selector` varchar(255) DEFAULT NULL,
+  `remember_code` varchar(255) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `last_login` int(11) UNSIGNED DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
+(1, '127.0.0.1', 'administrator', '$2y$12$Rg.mjuH4KwGXryhj8hwHbuTH2123Z5Y4eLv5wRsKeM33tJ893CLCW', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', 2022, 1, 'Super', 'Admin', 'XYZ', '9769337909'),
+(2, '::1', 'test_', '$2y$12$Rg.mjuH4KwGXryhj8hwHbuTH2123Z5Y4eLv5wRsKeM3...', 'test@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-03-12 22:58:33', 2022, 1, 'General', 'User', NULL, '9797979797');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_groups`
+--
+
+CREATE TABLE `users_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` mediumint(8) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users_groups`
+--
+
+INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
+(1, 1, 1),
+(3, 2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `years_list`
+--
+
+CREATE TABLE `years_list` (
+  `id` int(11) NOT NULL,
+  `name` bigint(10) DEFAULT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `groups`
+--
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `nz_department`
+--
+ALTER TABLE `nz_department`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `item_id` (`item_id`);
+
+--
+-- Indexes for table `nz_items`
+--
+ALTER TABLE `nz_items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `nz_purchase`
+--
+ALTER TABLE `nz_purchase`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vendor_id` (`vendor_id`),
+  ADD KEY `item_id` (`item_id`),
+  ADD KEY `sub_item_id` (`sub_item_id`) USING BTREE;
+
+--
+-- Indexes for table `nz_selling`
+--
+ALTER TABLE `nz_selling`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vendor_id` (`vendor_id`),
+  ADD KEY `item_id` (`item_id`),
+  ADD KEY `sub_item_id` (`sub_item_id`) USING BTREE;
+
+--
+-- Indexes for table `nz_vendors`
+--
+ALTER TABLE `nz_vendors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sms_available`
+--
+ALTER TABLE `sms_available`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `item_id` (`item_id`),
+  ADD KEY `sub_item_id` (`sub_item_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_email` (`email`),
+  ADD UNIQUE KEY `uc_activation_selector` (`activation_selector`),
+  ADD UNIQUE KEY `uc_forgotten_password_selector` (`forgotten_password_selector`),
+  ADD UNIQUE KEY `uc_remember_selector` (`remember_selector`);
+
+--
+-- Indexes for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
+  ADD KEY `fk_users_groups_users1_idx` (`user_id`),
+  ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
+
+--
+-- Indexes for table `years_list`
+--
+ALTER TABLE `years_list`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `groups`
+--
+ALTER TABLE `groups`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `nz_department`
+--
+ALTER TABLE `nz_department`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `nz_items`
+--
+ALTER TABLE `nz_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
+
+--
+-- AUTO_INCREMENT for table `nz_purchase`
+--
+ALTER TABLE `nz_purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `nz_selling`
+--
+ALTER TABLE `nz_selling`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `nz_vendors`
+--
+ALTER TABLE `nz_vendors`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `sms_available`
+--
+ALTER TABLE `sms_available`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `years_list`
+--
+ALTER TABLE `years_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `nz_department`
+--
+ALTER TABLE `nz_department`
+  ADD CONSTRAINT `nz_department_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
+
+--
+-- Constraints for table `nz_purchase`
+--
+ALTER TABLE `nz_purchase`
+  ADD CONSTRAINT `nz_purchase_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
+  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`),
+  ADD CONSTRAINT `nz_purchase_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
+
+--
+-- Constraints for table `nz_selling`
+--
+ALTER TABLE `nz_selling`
+  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`),
+  ADD CONSTRAINT `nz_selling_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
+  ADD CONSTRAINT `nz_selling_ibfk_4` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
+
+--
+-- Constraints for table `sms_available`
+--
+ALTER TABLE `sms_available`
+  ADD CONSTRAINT `sms_available_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`),
+  ADD CONSTRAINT `sms_available_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
+
+--
+-- Constraints for table `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

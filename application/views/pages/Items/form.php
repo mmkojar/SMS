@@ -12,18 +12,18 @@
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" class="form-control"  
-                            value="<?php echo isset($items['name']) ? $items['name'] : '' ?>">
+                            value="<?php echo isset($items['name']) ? $items['name'] : set_value('name') ?>">
                             <p class="text-danger"><?php echo form_error('name'); ?></p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group">
                             <label for="min_qty">Min Quantity</label>
                             <input type="text" name="min_qty" id="min_qty" class="form-control"  
-                            value="<?php echo isset($items['min_qty']) ? $items['min_qty'] : '' ?>">
-                            <p class="text-danger"><?php echo form_error('min_qty'); ?></p>
+                            value="<s?php echo isset($items['min_qty']) ? $items['min_qty'] : '' ?>">
+                            <p class="text-danger"><s?php echo form_error('min_qty'); ?></p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <?php echo form_hidden($csrf); ?>                
                 <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>

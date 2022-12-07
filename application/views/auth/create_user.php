@@ -37,6 +37,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label for="company_name">Company Name</label>
+                        <?php echo form_input($company);?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label for="phone">Phone</label>
                         <?php echo form_input($phone);?>
                         <?php echo form_error('phone','<p class="error">', '</p>'); ?>

@@ -69,10 +69,10 @@ INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nz_available`
+-- Table structure for table `sms_available`
 --
 
-CREATE TABLE `nz_available` (
+CREATE TABLE `sms_available` (
   `id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `unit` varchar(255) DEFAULT NULL,
@@ -84,10 +84,10 @@ CREATE TABLE `nz_available` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `nz_available`
+-- Dumping data for table `sms_available`
 --
 
-INSERT INTO `nz_available` (`id`, `item_id`, `unit`, `qty`, `rate`, `date`, `created_at`, `updated_at`) VALUES
+INSERT INTO `sms_available` (`id`, `item_id`, `unit`, `qty`, `rate`, `date`, `created_at`, `updated_at`) VALUES
 (2, 2, 'KG', 116, '58.69', '2022-06-16', '2022-06-16 09:59:41', '2022-11-05 10:52:55'),
 (3, 107, 'KG', 49, '659.67', '2022-06-23', '2022-06-23 04:02:10', '2022-07-20 03:23:53'),
 (4, 8, 'KG', 36, '270', '2022-07-05', '2022-07-05 08:33:49', '2022-09-23 10:43:21'),
@@ -345,7 +345,7 @@ INSERT INTO `nz_items` (`id`, `name`, `min_qty`, `created_at`, `updated_at`) VAL
 CREATE TABLE `nz_purchase` (
   `id` int(11) NOT NULL,
   `vendor_id` int(11) DEFAULT NULL,
-  `dpt_id` int(11) DEFAULT '0',
+  `sub_item_id` int(11) DEFAULT '0',
   `item_id` int(11) DEFAULT NULL,
   `unit` varchar(255) DEFAULT NULL,
   `qty` bigint(20) DEFAULT NULL,
@@ -361,7 +361,7 @@ CREATE TABLE `nz_purchase` (
 -- Dumping data for table `nz_purchase`
 --
 
-INSERT INTO `nz_purchase` (`id`, `vendor_id`, `dpt_id`, `item_id`, `unit`, `qty`, `rate`, `total_amount`, `date`, `is_sell`, `created_at`, `updated_at`) VALUES
+INSERT INTO `nz_purchase` (`id`, `vendor_id`, `sub_item_id`, `item_id`, `unit`, `qty`, `rate`, `total_amount`, `date`, `is_sell`, `created_at`, `updated_at`) VALUES
 (2, 25, 2, 2, 'KG', 50, '40', '2000', '2022-07-16', '0', '2022-06-16 09:59:41', '2022-09-14 12:13:35'),
 (3, 27, 2, 2, 'KG', 50, '42', '2100', '2022-06-16', '0', '2022-06-16 10:04:49', NULL),
 (4, 27, 4, 107, 'KG', 80, '670', '53600', '2022-06-23', '0', '2022-06-23 04:02:10', '2022-06-29 10:24:28'),
@@ -383,7 +383,7 @@ INSERT INTO `nz_purchase` (`id`, `vendor_id`, `dpt_id`, `item_id`, `unit`, `qty`
 CREATE TABLE `nz_selling` (
   `id` int(11) NOT NULL,
   `item_id` int(11) DEFAULT NULL,
-  `dpt_id` int(11) DEFAULT '0',
+  `sub_item_id` int(11) DEFAULT '0',
   `unit` varchar(50) DEFAULT NULL,
   `qty` bigint(20) DEFAULT NULL,
   `rate` varchar(50) DEFAULT NULL,
@@ -398,7 +398,7 @@ CREATE TABLE `nz_selling` (
 -- Dumping data for table `nz_selling`
 --
 
-INSERT INTO `nz_selling` (`id`, `item_id`, `dpt_id`, `unit`, `qty`, `rate`, `total_amount`, `outlet`, `date`, `created_at`, `updated_at`) VALUES
+INSERT INTO `nz_selling` (`id`, `item_id`, `sub_item_id`, `unit`, `qty`, `rate`, `total_amount`, `outlet`, `date`, `created_at`, `updated_at`) VALUES
 (1, 2, 2, 'KG', 14, '40', '560', 'Metro', '2022-06-16', '2022-06-16 10:00:51', '2022-06-23 02:44:44'),
 (2, 107, 4, 'KG', 6, '670', '4020', 'Parel', '2022-06-23', '2022-06-23 04:03:18', NULL),
 (3, 107, 4, 'KG', 8, '670', '5360', 'Naaz Executive', '2022-06-23', '2022-06-23 04:03:33', NULL),
@@ -525,9 +525,9 @@ ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `nz_available`
+-- Indexes for table `sms_available`
 --
-ALTER TABLE `nz_available`
+ALTER TABLE `sms_available`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -548,14 +548,14 @@ ALTER TABLE `nz_items`
 ALTER TABLE `nz_purchase`
   ADD PRIMARY KEY (`id`),
   ADD KEY `vendor_id` (`vendor_id`),
-  ADD KEY `dpt_id` (`dpt_id`);
+  ADD KEY `sub_item_id` (`sub_item_id`);
 
 --
 -- Indexes for table `nz_selling`
 --
 ALTER TABLE `nz_selling`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `dpt_id` (`dpt_id`);
+  ADD KEY `sub_item_id` (`sub_item_id`);
 
 --
 -- Indexes for table `nz_vendors`
@@ -605,9 +605,9 @@ ALTER TABLE `login_attempts`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT for table `nz_available`
+-- AUTO_INCREMENT for table `sms_available`
 --
-ALTER TABLE `nz_available`
+ALTER TABLE `sms_available`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
@@ -667,13 +667,13 @@ ALTER TABLE `years_list`
 --
 ALTER TABLE `nz_purchase`
   ADD CONSTRAINT `nz_purchase_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
-  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`dpt_id`) REFERENCES `nz_department` (`id`);
+  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
 
 --
 -- Constraints for table `nz_selling`
 --
 ALTER TABLE `nz_selling`
-  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`dpt_id`) REFERENCES `nz_department` (`id`);
+  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
 
 --
 -- Constraints for table `users_groups`

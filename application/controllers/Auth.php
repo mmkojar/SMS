@@ -133,6 +133,7 @@ class Auth extends CI_Controller
 				'class' => 'form-control',
                 'placeholder' => 'Password',
 				'type' => 'password',
+				'value' => '123'
 			];
 
 			$this->data['csrf'] = $this->_get_csrf_nonce();
@@ -502,6 +503,7 @@ class Auth extends CI_Controller
 
 		// validate form input
 		$this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'trim|required');
+		$this->form_validation->set_rules('company', 'Company Name', 'trim|required');
 		// $this->form_validation->set_rules('last_name', $this->lang->line('create_user_validation_lname_label'), 'trim|required');
 		if ($identity_column !== 'email')
 		{
@@ -527,7 +529,7 @@ class Auth extends CI_Controller
 			$additional_data = [
 				'first_name' => $this->input->post('first_name'),
 				'last_name' => $this->input->post('last_name'),
-				// 'company' => $this->input->post('company'),
+				'company' => $this->input->post('company'),
 				'phone' => $this->input->post('phone'),
 			];
 		}
@@ -559,6 +561,14 @@ class Auth extends CI_Controller
 				'id' => 'last_name',
 				'type' => 'text',
 				'value' => $this->form_validation->set_value('last_name'),
+				'class' => 'form-control',
+				// 'required' => true,
+			];
+			$this->data['company'] = [
+				'name' => 'company',
+				'id' => 'company',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('company'),
 				'class' => 'form-control',
 				// 'required' => true,
 			];
@@ -640,6 +650,7 @@ class Auth extends CI_Controller
 		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'trim|required');
 		// $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'trim|required');
 		$this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'trim');
+		$this->form_validation->set_rules('company', 'Company Name', 'trim|required');
 		// if ($identity_column !== 'email')
 		// {
 		// 	$this->form_validation->set_rules('identity', $this->lang->line('create_user_validation_identity_label'), 'trim|required|is_unique[' . $tables['users'] . '.' . $identity_column . ']');
@@ -670,6 +681,7 @@ class Auth extends CI_Controller
 				$data = [
 					'first_name' => $this->input->post('first_name'),
 					'last_name' => $this->input->post('last_name'),
+					'company' => $this->input->post('company'),
 					'email' => $this->input->post('email'),
 					'phone' => $this->input->post('phone'),
 				];
@@ -738,6 +750,14 @@ class Auth extends CI_Controller
 			// 'readonly' => true,
 			'value' => $this->form_validation->set_value('last_name', $user->last_name),
 		];
+		$this->data['company'] = [
+			'name'  => 'company',
+			'id'    => 'company',
+			'class' => 'form-control',
+			'type'  => 'text',
+			// 'readonly' => true,
+			'value' => $this->form_validation->set_value('company', $user->company),
+		];
 		/*$this->data['identity'] = [
 				'name' => 'identity',
 				'id' => 'identity',
@@ -757,6 +777,7 @@ class Auth extends CI_Controller
 			'id'    => 'phone',
 			'class' => 'form-control',
 			'type'  => 'text',
+			'readonly' => true,
 			'value' => $this->form_validation->set_value('phone', $user->phone),
 		];
 		$this->data['password'] = [

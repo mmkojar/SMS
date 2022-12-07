@@ -14,9 +14,8 @@
                         <tr>
                             <th>Sr.No</th>
                             <th>Name</th>
-                            <th>Min Qty</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
+                            <!-- <th>Min Qty</th> -->
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -26,9 +25,8 @@
                         <tr>
                             <td><?php echo $sr_no; ?></td>
                             <td><?php echo $row->name ?></td>
-                            <td><?php echo $row->min_qty ?></td>
+                            <!-- <td><s?php echo $row->min_qty ?></td> -->
                             <td><?php echo $row->created_at ?></td>
-                            <td><?php echo $row->updated_at ?></td>
                             <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('items/form/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;<a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('items/delete/'.$row->id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                         </tr>
                         <?php $sr_no++; ?>

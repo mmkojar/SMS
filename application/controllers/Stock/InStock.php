@@ -12,6 +12,7 @@ class InStock extends CI_Controller {
 		$this->load->library(['ion_auth', 'form_validation']);
 		$this->load->helper(['file','url', 'language']);
 		$this->load->model('Stock_model');
+		$this->load->model('Crud_model');
 		$this->load->model('ion_auth_model');
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 		
@@ -30,6 +31,13 @@ class InStock extends CI_Controller {
         $this->data['instocks'] = $this->Stock_model->get();
         
         $this->_render_page('pages/Stock/Instock/' . DIRECTORY_SEPARATOR . 'index', $this->data);
+	}
+
+	public function stockapi() {
+		$pur = $this->Crud_model->get('nz_purchase','');
+		$sal = $this->Crud_model->get('nz_selling','');
+
+		print_r(json_encode(['pur'=>$pur,'sale'=>$sal]));
 	}
     
 	public function _get_csrf_nonce()

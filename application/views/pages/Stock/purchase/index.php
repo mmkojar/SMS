@@ -14,15 +14,13 @@
                         <tr>
                             <th>Sr.No</th>
                             <th>Vendor Name</th>
-                            <th>Department Name</th>
                             <th>Item Name</th>
-                            <th>Unit</th>
+                            <th>Sub-Item</th>
+                            <!-- <th>Unit</th> -->
                             <th>Qty</th>
                             <th>Purchase Rate</th>
                             <th>Total Amount</th>
                             <th>Date</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -32,26 +30,24 @@
                         <tr>
                             <td><?php echo $sr_no; ?></td>
                             <td><?php echo $row->vendor_name ?></td>
-                            <td><?php echo $row->depart_name; ?></td>
                             <td><?php echo $row->item_name ?></td>
-                            <td><?php echo $row->unit ?></td>
+                            <td><?php echo $row->depart_name; ?></td>
+                            <!-- <td><s?php echo $row->unit ?></td> -->
                             <td><?php echo $row->qty ?></td>
                             <td><?php echo $row->rate ?></td>
                             <td><?php echo $row->total_amount ?></td>
                             <td><?php echo $row->date ?></td>
-                            <td><?php echo $row->created_at ?></td>
-                            <td><?php echo $row->updated_at ?></td>
                             <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('purchase/edit/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>
-                            <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('purchase/delete/'.$row->id.'/'.$row->item_id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
+                            <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('purchase/delete/'.$row->id.'/'.$row->item_id.'/'.$row->sub_item_id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                         </tr>
                         <?php $sr_no++; ?>
                         <?php endforeach;?>
                     </tbody>
 					<tfoot>
 						<tr>
-							<th colspan="5" style="text-align:right">Total:</th>
+							<th colspan="4" style="text-align:right">Total:</th>
 							<th></th>
-							<th colspan="6"></th>
+							<th colspan="4"></th>
 						</tr>
 					</tfoot>
                 </table>
@@ -69,12 +65,12 @@
     $(document).ready(function() {
         
          $('#purchase_stocks').DataTable({
-            order: [[3,'desc']],
+            order: [[2,'desc']],
             rowGroup: {
-                dataSrc: [3]
+                dataSrc: [2]
             },
             columnDefs: [{
-                targets: [3],
+                targets: [2],
                 visible: false
             }],
             dom: 'lBfrtip',
@@ -92,7 +88,7 @@
 	
 				// Total over all pages
 				total = api
-					.column(5)
+					.column(4)
 					.data()
 					.reduce(function (a, b) {
 						return intVal(a) + intVal(b);
@@ -100,14 +96,14 @@
 	
 				// Total over this page
 				pageTotal = api
-					.column(5, { page: 'current' })
+					.column(4, { page: 'current' })
 					.data()
 					.reduce(function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0);
 	
 				// Update footer
-				$(api.column(5).footer()).html(pageTotal + ' ( ' + total + ' total)');
+				$(api.column(4).footer()).html(pageTotal + ' ( ' + total + ' total)');
 			},
         });
     })
