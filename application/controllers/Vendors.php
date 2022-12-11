@@ -50,7 +50,8 @@ class Vendors extends CI_Controller {
 			$additional_data = [
 				'name' => trim($this->input->post('name')),
 				'phone' => $this->input->post('phone'),
-				'address' => $this->input->post('address')
+				'address' => $this->input->post('address'),
+				'gstin' => $this->input->post('gstin')
 			];
 
 			if($id) {
@@ -79,7 +80,7 @@ class Vendors extends CI_Controller {
 				$this->Crud_model->insert('nz_vendors',$additional_data);
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
-				redirect("vendors/form", 'refresh');
+				redirect("vendors", 'refresh');
 			}
 		}
 		else

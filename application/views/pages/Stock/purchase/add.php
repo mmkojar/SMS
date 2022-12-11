@@ -1,26 +1,27 @@
-<?php $this->load->view('templates/header'); ?>
+<?php $this->load->view('templates/header',$pagename); ?>
 
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4>            
+            <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4>
         </div>
         <div class="card-body">
             <form action="" method="POST" id="saveForm">
                 <div class="row">
+                    <div class="col-md-12">
+						<span id="errors"></span>
+					</div>
                     <div class="col-md-12">                
                         <div class="table-responsive">
-                            <span id="errors"></span>
                             <table id="multi_form" class="table table-striped table-bordered table-responsive-md" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>    
+                                        <th>PO.NO</th>
                                         <th>Vendor Name</th>
                                         <th>Item</th>
                                         <th>Sub-Item</th>
                                         <th>Qty</th>
-                                        <!-- <th>Select Unit</th> -->
                                         <th>Purchase Rate</th>
-                                        <!-- <th>Selling Rate</th> -->
                                         <th>Date</th>
                                         <th width="50px" id="remove_rows">
                                             <div class="add_row text-center"><i class="btn btn-sm btn-info mdi mdi-plus-circle"></i></div>
@@ -50,6 +51,7 @@
             count += 1;
             var html = '';
             html += '<tr>';
+            html += '<td><input type="text" id="po_no_' + count + '" data-sub_item='+count+' name="po_no[]" class="form-control po_no" placeholder=""/></td>';
             html += '<td><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
             html += '<td><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_' + count + '"><option value="" selected>--select--</option><?php print_r($items) ?></select></td>';
             html += '<td><select class="form-control sub_item_id select2" data-sub_item='+count+' name="sub_item_id[]" id="sub_item_id_' + count + '"></select></td>';
@@ -94,20 +96,25 @@
             var sub_item = $(this).data('sub_item');
 			
 			var dropdownvalue = $(this).val();
-			/* $(".item_id").not(this).find('option[value="' + dropdownvalue + '"]').remove();
+			/* $(".item_id").not(this).find('option[value="' + dropdownvalue + '"]').remove();*/
             
             var today = new Date();
-            document.querySelector("#date_"+sub_item).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2); */
-
+            document.querySelector("#date_"+sub_item).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2); 
+            
             $.ajax({
 				url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
                 method:"GET",
                 dataType:'json',
                 success:function(res)
                 {         
-                    var html = '';                    
-                    for(var i in res) {
-                        html += `<option value="${res[i].id}">${res[i].name}</option>`;
+                    var html = '';
+                    if(res.length > 0) {
+                        for(var i in res) {
+                            html += `<option value="${res[i].id}">${res[i].name}</option>`;
+                        }
+                    }
+                    else {
+                        html += '<option value="0">No Data Dound</option>';
                     }
                     $('#sub_item_id_'+sub_item).html(html);
                 }
@@ -119,7 +126,7 @@
 
             e.preventDefault();
             var errors = '';
-            $('.vendor_id,.sub_item_id,.item_id,.qty,.rate,.date').each(function(){
+            $('.vendor_id,.item_id,.qty,.rate,.date').each(function(){
                 var sub_item = $(this).data('sub_item');
                 if($(this).val() == '')
                 {

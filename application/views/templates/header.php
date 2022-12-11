@@ -1,7 +1,7 @@
 <?php 
     $link = $_SERVER['PHP_SELF'];
     $link_array = explode('/',$link);
-    $page = end($link_array);    
+    $page = end($link_array);        
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -90,7 +90,7 @@
             </nav>
         </header>
        
-       <?php $this->load->view('templates/sidebar') ?>
+       <?php $this->load->view('templates/sidebar', isset($pagename) && $pagename) ?>
        
         <div class="page-wrapper">    
             <div class="container-fluid">

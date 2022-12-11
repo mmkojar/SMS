@@ -1,4 +1,4 @@
-<?php $this->load->view('templates/header'); ?>
+<?php $this->load->view('templates/header',$pagename); ?>
 
 <div class="col-12">
     <div class="card">
@@ -17,6 +17,7 @@
                             <table id="multi_form" class="table table-striped table-bordered table-responsive-md" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
+										<th>PO.NO</th>
                             			<th>Vendor Name</th>
                                         <th>Item Name</th>
 										<th>Sub-Item</th>
@@ -165,6 +166,7 @@
             count += 1;
             var html = '';
             html += '<tr>';
+			html += '<td><input type="text" id="po_no_' + count + '" data-sub_item='+count+' name="po_no[]" class="form-control po_no" placeholder=""/></td>';
             html += '<td><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
             html += '<td><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_'+count+'"><option value="" selected>--select--</option><?php print_r($items); ?></select></td>';
             html += '<td><select class="form-control sub_item_id select2" name="sub_item_id[]" data-sub_item='+count+' id="sub_item_id_' + count + '"></select></td>';
@@ -208,7 +210,7 @@
 
         $(document).on('change', '.item_id', function(){
                         
-			var sub_item = $(this).data('sub_item');
+			var countitems = $(this).data('sub_item');
 			var dropdownvalue = $(this).val();
 			$.ajax({
 				url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
@@ -216,51 +218,65 @@
                 dataType:'json',
                 success:function(res)
                 {
-                    var html = '';
-					html += '<option value="">Select</option>';
-                    for(var i in res) {
-                        html += `<option value="${res[i].id}">${res[i].name}</option>`;
-                    }
-                    $('#sub_item_id_'+sub_item).html(html);
+					var html = '';
+					if(res.length > 0) {
+						$('#qty_'+countitems).val(0);
+						$('#hidden_qty_'+countitems).val(0);
+						$('#qty_'+countitems).removeAttr('max');
+
+						html += '<option value="">Select</option>';
+						for(var i in res) {
+							html += `<option value="${res[i].id}">${res[i].name}</option>`;
+						}
+					}
+					else {
+						html += '<option value="0">No Data Dound</option>';
+						onChangeSubitem(dropdownvalue,0,countitems)
+					}
+					$('#sub_item_id_'+countitems).html(html);         
                 }
             })
             
         });
+
+		function onChangeSubitem(id,sid,countitems) {
+
+			var today = new Date();
+			document.querySelector("#date_"+countitems).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+			
+			$.ajax({
+				url:"<?php echo base_url('Stock/selling/getPurchaseItemsOnChange') ?>",
+				method:"POST",
+				data:{item_id:id,sub_item_id:sid},
+				dataType:'json',
+				success:function(res)
+				{
+					if(res !== 0) {
+						$('#qty_'+countitems).val(res);
+						$('#hidden_qty_'+countitems).val(res);
+						$('#qty_'+countitems).attr('max',res);
+						// $('#purchase_rate_'+countitems).val(res[0].rate);
+						// $('#rate').val(res.selling_rate);
+					} 
+					else {
+						$('#qty_'+countitems).val(0);
+						$('#hidden_qty_'+countitems).val(0);
+						$('#qty_'+countitems).removeAttr('max');
+					}
+					
+				}
+			})
+		}
 
 		$(document).on('change', '.sub_item_id', function(){
 			
 			var countitems = $(this).data('sub_item');
 			var item_id = $('#item_id_'+countitems).val();
 			var sub_item_id = $(this).val();
-			console.log("item_id:",item_id);
-			console.log("sub_item_id:",sub_item_id);
-			var today = new Date();
-			document.querySelector("#date_"+countitems).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
 			if(sub_item_id !== "") {
-				$.ajax({
-					url:"<?php echo base_url('Stock/selling/getPurchaseItemsOnChange') ?>",
-					method:"POST",
-					data:{item_id:item_id,sub_item_id:sub_item_id},
-					dataType:'json',
-					success:function(res)
-					{
-						console.log(res);
-						if(res.length > 0) {
-							// $('#unit').val(res.unit);
-							$('#qty_'+countitems).val(res[0].qty);
-							$('#hidden_qty_'+countitems).val(res[0].qty);
-							$('#qty_'+countitems).attr('max',res[0].qty);
-							// $('#purchase_rate_'+countitems).val(res[0].rate);
-							// $('#rate').val(res.selling_rate);
-						} 
-						else {
-							$('#qty_'+countitems).val(0);
-							$('#hidden_qty_'+countitems).val(0);
-							$('#qty_'+countitems).removeAttr('max');
-						}
-						
-					}
-				})
+
+				onChangeSubitem(item_id,sub_item_id,countitems)
 			}
 			
 		});
@@ -269,10 +285,10 @@
 			
             e.preventDefault();
             var errors = '';
-            $('.vendor_id,.item_id,.sub_item_id,.qty,.rate,.date').each(function(){
+            $('.vendor_id,.item_id,.qty,.rate,.date').each(function(){
                 if($(this).val() == '')
                 {
-                    errors += 'Fill All Details'+'<br>';              
+                    errors += 'Fill All Details'+'<br>';
                     return false;
                 }
                 else {
@@ -283,6 +299,7 @@
             $('.qty').each(function() {
 				var countitems = $(this).data('sub_item');
                 var inputVal = $(this).val();
+                var hiddenqty = $("#hidden_qty_"+countitems).val();
                 var checkQty = $(this).attr('max');
 				if(inputVal !== '') {
 					if(Number(inputVal) == 0) {
@@ -291,6 +308,10 @@
 					}
 					else if((Number(inputVal) > Number(checkQty))) {
 						errors += 'Quantity should be less than '+checkQty+ ' at row no ' +countitems;
+						return false;
+					}
+					else if(hiddenqty == 0) {
+						errors += 'No Purchase Entry found for Item at row no ' +countitems;
 						return false;
 					}
 					else {

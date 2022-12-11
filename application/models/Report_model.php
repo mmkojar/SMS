@@ -13,11 +13,18 @@ class Report_model extends CI_Model
 	}
 			
 	public function get($table,$mt,$yr) {
-       
-		$this->db->select($table.".*,nz_items.name as item_name,nz_department.name as depart_name");
-        $this->db->from($table);
-        $this->db->join('nz_items',"nz_items.id = ".$table.".item_id","left");
-		$this->db->join('nz_department',"nz_department.id = ".$table.".sub_item_id","left");
+		
+		if($table == 'nz_purchase' || $table == 'nz_selling') {
+			$this->db->select($table.".*,nz_items.name as item_name,nz_department.name as depart_name,nz_vendors.name as vendor_name");
+			$this->db->from($table);
+			$this->db->join('nz_items',"nz_items.id = ".$table.".item_id","left");
+			$this->db->join('nz_vendors',"nz_vendors.id =".$table.".vendor_id","left");
+			$this->db->join('nz_department',"nz_department.id = ".$table.".sub_item_id","left");
+		}
+		else {
+			$this->db->select($table.'.*');
+			$this->db->from($table);
+		}
         if($mt) {
             $this->db->where('MONTH('.$table.'.date)',$mt);
             $this->db->where('YEAR('.$table.'.date)',$yr);

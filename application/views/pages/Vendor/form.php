@@ -31,6 +31,14 @@
                             <p class="text-danger"><?php echo form_error('address'); ?></p>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gstin">GSITIN</label>
+                            <input type="text" name="gstin" id="gstin" class="form-control"  
+                            value="<?php echo isset($vendor['gstin']) ? $vendor['gstin'] : '' ?>">
+                            <p class="text-danger"><?php echo form_error('gstin'); ?></p>
+                        </div>
+                    </div>
                 </div>
                 <?php echo form_hidden($csrf); ?>                
                 <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>

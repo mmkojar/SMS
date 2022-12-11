@@ -56,19 +56,21 @@ $route['logout'] = 'auth/logout';
 $route['users/add'] = 'auth/create_user';
 $route['profile/(:any)'] = 'auth/edit_user/$1';
 
-$route['purchase'] = 'Stock/purchase';
-$route['purchase/add'] = 'Stock/purchase/add';
-$route['purchase/insert'] = 'Stock/purchase/insert';
-$route['purchase/vendorsApi'] = 'Stock/purchase/VendorsApi';
-$route['purchase/edit/(:any)'] = 'Stock/purchase/edit/$1';
-$route['purchase/delete/(:any)/(:any)/(:any)'] = 'Stock/purchase/delete/$1/$2/$3';
+$route['stocks'] = 'Stock/Listing';
+$route['stocks/api'] = 'Stock/Listing/api';
+$route['purchase'] = 'Stock/Purchase';
+$route['purchase/add'] = 'Stock/Purchase/add';
+$route['purchase/insert'] = 'Stock/Purchase/insert';
+$route['purchase/vendorsApi'] = 'Stock/Purchase/VendorsApi';
+$route['purchase/edit/(:any)'] = 'Stock/Purchase/edit/$1';
+$route['purchase/delete/(:any)/(:any)/(:any)'] = 'Stock/Purchase/delete/$1/$2/$3';
 
-$route['selling'] = 'Stock/selling';
-$route['selling/add'] = 'Stock/selling/add';
-$route['selling/insert'] = 'Stock/selling/insert';
-$route['selling/vapi'] = 'Stock/selling/vendorsApi';
-$route['selling/edit/(:any)'] = 'Stock/selling/edit/$1';
-$route['selling/delete/(:any)/(:any)/(:any)/(:any)'] = 'Stock/selling/delete/$1/$2/$3/$4';
+$route['selling'] = 'Stock/Selling';
+$route['selling/add'] = 'Stock/Selling/add';
+$route['selling/insert'] = 'Stock/Selling/insert';
+$route['selling/vapi'] = 'Stock/Selling/vendorsApi';
+$route['selling/edit/(:any)'] = 'Stock/Selling/edit/$1';
+$route['selling/delete/(:any)/(:any)/(:any)/(:any)'] = 'Stock/Selling/delete/$1/$2/$3/$4';
 
 $route['instock'] = 'Stock/InStock';
 

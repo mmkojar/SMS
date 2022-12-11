@@ -3,13 +3,10 @@
 
 <div class="col-12">
     <div class="card">
-        <div class="card-header">
-            <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4>            
-        </div>
         <div class="card-body">
             <?php $month = ['01'=>'Jan','02'=>'Feb','03'=>'Mar','04'=>'Apr','05'=>'May','06'=>'Jun','07'=>'Jul','08'=>'Aug','09'=>'Sep','10'=>'Oct',
 									'11'=>'Nov','12'=>'Dec'] ?>
-			<?php $year = ['2022','2023','2024','2025','2026','2027','2028','2029','2030'] ?>
+            <?php $year = ['2022','2023','2024','2025','2026','2027','2028','2029','2030'] ?>
             <form method="post" name="filter_report_form">
                 <div class="row">
                     <div class="col-4">
@@ -37,14 +34,33 @@
                         </div>
                     </div>
                 </div>
-                		   					
+                                            
             </form>
-            <div class="table-responsive">
-                <table id="purchase_reports" class="table table-bordered table-striped" style="width:100%">
-                   
+            <ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#purchase" role="tab"><span
+							class="hidden-sm-up"></span> <span class="hidden-xs-down">Purchase</span></a> </li>
+				<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#sell" role="tab"><span
+							class="hidden-sm-up"></span> <span class="hidden-xs-down">Selling</span></a> </li>
+			</ul>
+            <div class="tab-content tabcontent-border mt-4">
+				<div class="tab-pane active" id="purchase" role="tabpanel">
+                    <div class="table-responsive">
+                        <table id="purchase_reports" class="table table-bordered table-striped" style="width:100%">
                     
-                </table>
+                        
+                    </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="sell" role="tabpanel">                        
+                    <div class="table-responsive">
+                        <table id="selling_reports" class="table table-bordered table-striped" style="width:100%">
+                    
+                        
+                    </table>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
 </div>
@@ -63,18 +79,21 @@
             var year = $("#filter_year").val();
 
             $('#purchase_reports').DataTable().destroy();
-            getPurchaseReports(month, year);
+            $('#selling_reports').DataTable().destroy();
+            getReports(month,year,'purchaseApi','#purchase_reports');
+            getReports(month,year,'sellingApi','#selling_reports');
         })
 
         var date = new Date();
         var cm = ("0" + (date.getMonth() + 1)).slice(-2)
         var cy = date.getFullYear();
 
-        getPurchaseReports(cm,cy);
+        getReports(cm,cy,'purchaseApi','#purchase_reports');
+        getReports(cm,cy,'sellingApi','#selling_reports');
 
-        function getPurchaseReports(mt,yr) {
+        function getReports(mt,yr,url,dt) {
             $.ajax({
-                url:'<?php echo base_url('reports/purchaseApi'); ?>',
+                url:'<?php echo base_url('reports/'); ?>'+url,
                 method:'GET',
                 data:{
                     mt:mt,
@@ -115,6 +134,7 @@
                         <thead>
                             <tr>
                                 <th>Sr.No</th>
+                                <th>Vendor Name</th>
                                 <th>Item Name</th>
                                 <th>Sub-Item</th>
                                 <th>Total Qty.</th>
@@ -129,6 +149,7 @@
                         html += `
                             <tr>
                             <td>${sr_no}</td>
+                            <td>${result[i].vendor_name}</td>
                             <td>${result[i].item_name}</td>
                             <td>${result[i].depart_name}</td>
                             <td>${result[i].qty}</td>
@@ -149,11 +170,12 @@
                                 <th style="text-align:right">Total:</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </tfoot>`;
 
-                    $("#purchase_reports").html(html);
-                    $('#purchase_reports').DataTable({                        
+                    $(dt).html(html);
+                    $(dt).DataTable({
                         dom: 'lBfrtip',
                         buttons: [
                             'excel'
@@ -169,7 +191,7 @@
                 
                             // Total over all pages
                             total = api
-                                .column(4)
+                                .column(5)
                                 .data()
                                 .reduce(function (a, b) {
                                     return intVal(a) + intVal(b);
@@ -177,14 +199,14 @@
                 
                             // Total over this page
                             pageTotal = api
-                                .column(4, { page: 'current' })
+                                .column(5, { page: 'current' })
                                 .data()
                                 .reduce(function (a, b) {
                                     return intVal(a) + intVal(b);
                                 }, 0);
                 
                             // Update footer
-                            $(api.column(4).footer()).html('<b>'+pageTotal+'</b>' + ' ( <b>' + total + ' total</b>)');
+                            $(api.column(5).footer()).html('<b>'+pageTotal+'</b>' + ' ( <b>' + total + ' total</b>)');
                         },
                     });
 

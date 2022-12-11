@@ -1,4 +1,4 @@
-<?php $this->load->view('templates/header'); ?>
+<?php $this->load->view('templates/header',$pagename); ?>
 
 <div class="col-12">
     <div class="card">
@@ -15,19 +15,18 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="item_name">Item Name</label>
-                            <select name="item_id" class="form-control">
-                                <option value="<?php echo $selling['item_id'] ?>"><?php echo isset($selling['item_name']) ? $selling['item_name'] : '' ?></option>
-                            </select>
+                            <label for="po_no">PO.NO</label>
+                            <input type="text" name="po_no" id="po_no" class="form-control" 
+                            value="<?php echo isset($purchase['po_no']) ? $purchase['po_no'] : '' ?>">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="sub_item_id">Department</label>
-                            <select name="sub_item_id" class="form-control">
-                                <?php foreach($departs as $row): ?>
-                                    <option value="<?php echo $row->id ?>" 
-                                        <?php echo ($row->id == $selling['sub_item_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
+                            <label for="vendor_id">Vendor Name</label>
+                            <select name="vendor_id" class="form-control">
+                                <?php foreach($vendors as $row): ?>
+                                    <option value="<?php echo $row->id ?>"
+                                        <?php echo ($row->id == $selling['vendor_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -35,21 +34,40 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="unit">Unit</label>
-                            <select class="form-control" name="unit" id="unit">
-                                <option value="GRAM" <?php echo ($selling['unit'] == 'GRAM') ? 'selected' : '' ?>>GRAM</option>
-                                <option value="KG" <?php echo ($selling['unit'] == 'KG') ? 'selected' : '' ?>>KG</option>
-                                <option value="LTR" <?php echo ($selling['unit'] == 'LTR') ? 'selected' : '' ?>>LTR</option>
-                                <option value="BOX" <?php echo ($selling['unit'] == 'BOX') ? 'selected' : '' ?>>BOX</option>
-                                <option value="PCS" <?php echo ($selling['unit'] == 'PCS') ? 'selected' : '' ?>>PCS</option>
+                            <label for="item_id">Item Name</label>
+                            <select name="item_id" class="form-control item_id">
+                                <?php foreach($items as $row): ?>
+                                    <option value="<?php echo $row->id ?>" 
+                                        <?php echo ($row->id == $selling['item_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
+						<!-- <input type="hidden" name="item_id" value="<s?php echo $selling['item_id'] ?>"> -->
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sub_item_id">Sub-Item</label>
+                            <select name="sub_item_id" id="sub_item_id" class="form-control">
+                                <?php if($selling['sub_item_id'] !== '0'): ?>
+                                <?php foreach($departs as $row): ?>
+                                    <option value="<?php echo $row->id ?>" 
+                                        <?php echo ($row->id == $selling['sub_item_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="0">No Data Dound</option>
+                                <?php endif ?>
+                            </select>
+                        </div>
+                        <!-- <input type="hidden" name="sub_item_id" value="<s?php echo $selling['sub_item_id'] ?>"> -->
+                    </div>                
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="qty">Qty</label>
                             <input type="number" name="qty" id="qty" class="form-control" 
-                            value="<?php echo isset($selling['qty']) ? $selling['qty'] : '' ?>" readonly>
+                            value="<?php echo isset($selling['qty']) ? $selling['qty'] : '' ?>" required>
+                            <!-- <input type="hidden" name="tot_qty" value="<s?php echo $totqty ?>"> -->
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -59,22 +77,6 @@
                             value="<?php echo isset($selling['rate']) ? $selling['rate'] : '' ?>" required>
                         </div>
                     </div>
-
-                    <!-- <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="outlet">Outlet</label>
-                            <select class="form-control" name="outlet" id="outlet">
-                                <option value="Naaz Kamani" <?php //echo ($selling['outlet'] == 'Naaz Kamani') ? 'selected' : '' ?>>Naaz Kamani</option>
-                                <option value="Naaz Jarimari" <?php //echo ($selling['outlet'] == 'Naaz Jarimari') ? 'selected' : '' ?>>Naaz Jarimari</option>
-                                <option value="Parel" <?php //echo ($selling['outlet'] == 'Parel') ? 'selected' : '' ?>>Parel</option>
-                                <option value="Patel" <?php //echo ($selling['outlet'] == 'Patel') ? 'selected' : '' ?>>Patel</option>
-                                <option value="Metro" <?php //echo ($selling['outlet'] == 'Metro') ? 'selected' : '' ?>>Metro</option>
-                                <option value="Naaz Executive" <?php //echo ($selling['outlet'] == 'Naaz Executive') ? 'selected' : '' ?>>Naaz Executive</option>
-                                <option value="Other" <?php //echo ($selling['outlet'] == 'Other') ? 'selected' : '' ?>>Other</option>
-                            </select>
-                        </div>
-                    </div> -->
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="date">Date</label>
@@ -93,3 +95,30 @@
 
 <?php $this->load->view('templates/footer') ?>
 
+<script>
+    $(document).ready(function() {
+        $(document).on('change', '.item_id', function(){
+            			
+			var dropdownvalue = $(this).val();        
+            
+            $.ajax({
+				url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
+                method:"GET",
+                dataType:'json',
+                success:function(res)
+                {         
+                    var html = '';
+                    if(res.length > 0) {
+                        for(var i in res) {
+                            html += `<option value="${res[i].id}">${res[i].name}</option>`;
+                        }
+                    }
+                    else {
+                        html += '<option value="0">No Data Dound</option>';
+                    }
+                    $('#sub_item_id').html(html);
+                }
+            })
+        });
+    })
+</script>
