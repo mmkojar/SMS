@@ -46,13 +46,12 @@ class Department extends CI_Controller {
 		:  $this->form_validation->set_rules('name','Name','trim|required|is_unique[nz_department.name]');
 
 		if ($this->form_validation->run() === TRUE)
-		{						
-			$additional_data = [
-				'item_id' => trim($this->input->post('item_id')),
-				'name' => trim($this->input->post('name')),
-			];
-
+		{									
 			if($id) {
+				$additional_data = [
+					'item_id' => trim($this->input->post('item_id')),
+					'name' => trim($this->input->post('name')),
+				];
 				$this->db->select('nz_department.*');
 				$this->db->from('nz_department');
 				$this->db->where(['nz_department.name'=> $this->input->post('name'),'nz_department.item_id'=>$this->input->post('item_id')]);
@@ -72,9 +71,16 @@ class Department extends CI_Controller {
 				redirect("department", 'refresh');
 			}
 			else {
-				$additional_data['created_at'] = date('Y-m-d h:i:s');
 
-				$this->Crud_model->insert('nz_department',$additional_data);
+				$collection = array_filter(explode(',', $this->input->post('name')),'strlen');
+				for($i = 0; $i < count($collection); $i++) {
+					$insert_data = [
+						'item_id' => trim($this->input->post('item_id')),
+						'name' => $collection[$i],
+						'created_at' => date('Y-m-d h:i:s')
+					];
+					$this->Crud_model->insert('nz_department',$insert_data);
+                }
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
 				redirect("department", 'refresh');

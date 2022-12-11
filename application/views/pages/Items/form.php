@@ -6,8 +6,8 @@
             <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4>
         </div>
         <div class="card-body">
-            <?php echo form_open(uri_string()); ?>
-                <div class="row">                 
+            <?php echo form_open(uri_string()); ?>                
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -15,6 +15,7 @@
                             value="<?php echo isset($items['name']) ? $items['name'] : set_value('name') ?>">
                             <p class="text-danger"><?php echo form_error('name'); ?></p>
                         </div>
+                        <p class="text-danger">Add Multiple name with comma for eg(a,b,c)</p>
                     </div>
                     <!-- <div class="col-md-6">
                         <div class="form-group">

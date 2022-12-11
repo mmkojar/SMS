@@ -3,7 +3,7 @@ $(function() {
 
     // $(".preloader").fadeOut();
 });
-
+$(".form-control").attr('autocomplete','off');
 $(document).ready(function() {
     // Load Branches For Modal
     if(grp_name == 'admin') {

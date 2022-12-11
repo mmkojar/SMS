@@ -30,7 +30,7 @@ class Items extends CI_Controller {
 	public function index() {
 
 		$this->data['title'] = 'Items';            
-
+		$this->data['csrf'] = $this->_get_csrf_nonce();
 		$this->data['items'] = $this->Crud_model->get('nz_items','');
 		
 		$this->_render_page('pages/Items/' . DIRECTORY_SEPARATOR . 'index', $this->data);
@@ -44,16 +44,14 @@ class Items extends CI_Controller {
         // $this->form_validation->set_rules('min_qty','Min Quantity','trim|required');
 		$inputname = trim($this->input->post('name'));
 		if ($this->form_validation->run() === TRUE)
-		{						
-			$additional_data = [
-				'name' => $inputname,
-				// 'min_qty' => trim($this->input->post('min_qty')),
-			];
-
+		{									
 			if($id) {
-				
+				$additional_data = [
+					'name' => $inputname,
+					// 'min_qty' => trim($this->input->post('min_qty')),
+				];	
 				// $query = $this->db->query('SELECT * FROM `nz_items` WHERE nz_items.name='.$inputname);
-				$this->db->select('nz_items.*');
+				/* $this->db->select('nz_items.*');
 				$this->db->from('nz_items');
 				$this->db->where('nz_items.name', $this->input->post('name'));
 				$query=$this->db->get();
@@ -63,7 +61,7 @@ class Items extends CI_Controller {
 						$this->session->set_flashdata('error', 'Item Name Already Exists');
 						redirect("items/form/".$id, 'refresh');						
 					}
-				}
+				} */
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
 
 				$this->Crud_model->update('nz_items',$id,$additional_data);
@@ -72,28 +70,38 @@ class Items extends CI_Controller {
 				redirect("Items", 'refresh');
 			}
 			else {
-				$additional_data['created_at'] = date('Y-m-d h:i:s');
 
-				$this->Crud_model->insert('nz_items',$additional_data);
+				$collection = array_filter(explode(',', $inputname),'strlen');				
+				for($i = 0; $i < count($collection); $i++) {
+					$insert_data = [
+						'name' => $collection[$i],
+						'created_at' => date('Y-m-d h:i:s')
+					];
+					$this->Crud_model->insert('nz_items',$insert_data);
+                }
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
 				redirect("Items", 'refresh');
 			}
 		}
 		else
-		{			           
+		{
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 
 			if($id) {
 				$this->data['title'] = "Edit Items";   
 				$this->data['items'] = $this->Crud_model->get('nz_items',$id);
-
+				$this->_render_page('pages/Items/' . DIRECTORY_SEPARATOR . 'form', $this->data);
 			}	
 			else {
-				$this->data['title'] = 'Add Items';
+				$this->data['items'] = $this->Crud_model->get('nz_items','');
+				$this->_render_page('pages/Items/' . DIRECTORY_SEPARATOR . 'index', $this->data);
+			}
+			// else {
+			// 	$this->data['title'] = 'Add Items';
 				
-			}			
-			$this->_render_page('pages/Items/' . DIRECTORY_SEPARATOR . 'form', $this->data);
+			// }			
+			// $this->_render_page('pages/Items/' . DIRECTORY_SEPARATOR . 'form', $this->data);
 		}
     }
 

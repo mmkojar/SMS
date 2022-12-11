@@ -32,21 +32,21 @@ class Expense extends CI_Controller {
 
     public function form($id = FALSE) {
         
-		$this->form_validation->set_rules('item','Item','trim|required');
+		$this->form_validation->set_rules('item[]','Item','trim|required');
 
 		if ($this->form_validation->run() === TRUE)
 		{						
-			$additional_data = [
-				'item' => trim($this->input->post('item')),
-				'bill_no' => trim($this->input->post('bill_no')),
-				'qty' => $this->input->post('qty'),
-				'rate' => $this->input->post('rate'),
-				'total_amount' => $this->input->post('qty')*$this->input->post('rate'),
-                'date' => $this->input->post('date'),
-			];
-
+			
 			if($id) {
-								
+				$additional_data = [
+					'vendor_id' => trim($this->input->post('vendor_id')),
+					'bill_no' => trim($this->input->post('bill_no')),
+					'item' => $this->input->post('item'),
+					'qty' => $this->input->post('qty'),
+					'rate' => $this->input->post('rate'),
+					'total_amount' => $this->input->post('qty')*$this->input->post('rate'),
+					'date' => $this->input->post('date'),
+				];				
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
 
 				$this->Crud_model->update('expenses',$id,$additional_data);
@@ -55,7 +55,23 @@ class Expense extends CI_Controller {
 				redirect("Expense", 'refresh');
 			}
 			else {
-				$this->Crud_model->insert('expenses',$additional_data);
+				$_POST['item'] = (explode(',',$_POST['item'][0]));
+				$_POST['qty'] = (explode(',',$_POST['qty'][0]));
+				$_POST['rate'] = (explode(',',$_POST['rate'][0]));
+
+				for($i = 0; $i < count($_POST['item']); $i++) {
+					$insert_data = [
+						'vendor_id' => $_POST['vendor_id'][0],
+						'bill_no' => $_POST['bill_no'][0],
+						'item' => $_POST['item'][$i],
+						'qty' => $_POST['qty'][$i],
+						'rate' => $_POST['rate'][$i],
+						'total_amount' => $_POST['qty'][$i]*$_POST['rate'][$i],
+						'date' => $_POST['date'][0],
+						'created_at' => date('Y-m-d h:i:s')
+					];
+					$this->Crud_model->insert('expenses',$insert_data);
+                }
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
 				redirect("Expense", 'refresh');
@@ -64,7 +80,7 @@ class Expense extends CI_Controller {
 		else
 		{			           
 			$this->data['csrf'] = $this->_get_csrf_nonce();
-
+			$this->data['vendors'] = $this->Crud_model->get('nz_vendors','');
 			if($id) {
 				$this->data['title'] = "Edit Expense";   
 				$this->data['expense'] = $this->Crud_model->get('expenses',$id);
