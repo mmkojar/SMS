@@ -69,10 +69,10 @@ INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nz_department`
+-- Table structure for table `nz_subitem`
 --
 
-CREATE TABLE `nz_department` (
+CREATE TABLE `nz_subitem` (
   `id` int(11) NOT NULL,
   `item_id` int(11) DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
@@ -81,10 +81,10 @@ CREATE TABLE `nz_department` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `nz_department`
+-- Dumping data for table `nz_subitem`
 --
 
-INSERT INTO `nz_department` (`id`, `item_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `nz_subitem` (`id`, `item_id`, `name`, `created_at`, `updated_at`) VALUES
 (13, 204, 'S20', '2022-12-06 02:21:30', '2022-12-06 04:00:39'),
 (14, 206, 'Iphone 12', '2022-12-06 02:22:10', '2022-12-06 04:00:04'),
 (15, 204, 'S22', '2022-12-06 04:00:33', '2022-12-06 04:05:36'),
@@ -309,9 +309,9 @@ ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `nz_department`
+-- Indexes for table `nz_subitem`
 --
-ALTER TABLE `nz_department`
+ALTER TABLE `nz_subitem`
   ADD PRIMARY KEY (`id`),
   ADD KEY `item_id` (`item_id`);
 
@@ -395,9 +395,9 @@ ALTER TABLE `login_attempts`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- AUTO_INCREMENT for table `nz_department`
+-- AUTO_INCREMENT for table `nz_subitem`
 --
-ALTER TABLE `nz_department`
+ALTER TABLE `nz_subitem`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
@@ -453,24 +453,24 @@ ALTER TABLE `years_list`
 --
 
 --
--- Constraints for table `nz_department`
+-- Constraints for table `nz_subitem`
 --
-ALTER TABLE `nz_department`
-  ADD CONSTRAINT `nz_department_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
+ALTER TABLE `nz_subitem`
+  ADD CONSTRAINT `nz_subitem_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
 
 --
 -- Constraints for table `nz_purchase`
 --
 ALTER TABLE `nz_purchase`
   ADD CONSTRAINT `nz_purchase_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
-  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`),
+  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_subitem` (`id`),
   ADD CONSTRAINT `nz_purchase_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
 
 --
 -- Constraints for table `nz_selling`
 --
 ALTER TABLE `nz_selling`
-  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`),
+  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_subitem` (`id`),
   ADD CONSTRAINT `nz_selling_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
   ADD CONSTRAINT `nz_selling_ibfk_4` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`);
 
@@ -479,7 +479,7 @@ ALTER TABLE `nz_selling`
 --
 ALTER TABLE `sms_available`
   ADD CONSTRAINT `sms_available_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `nz_items` (`id`),
-  ADD CONSTRAINT `sms_available_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
+  ADD CONSTRAINT `sms_available_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_subitem` (`id`);
 
 --
 -- Constraints for table `users_groups`

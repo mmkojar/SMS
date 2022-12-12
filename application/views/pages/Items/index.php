@@ -4,21 +4,25 @@
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <!-- <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4> -->
-            <!-- <a class="btn btn-info float-right" href="<?php echo base_url('items/form') ?>">Add</a> -->
+            <!-- <h4 class="float-left mb-0 mt-2"><s?php echo $title; ?></h4> -->
+            <!-- <a class="btn btn-info float-right" href="<s?php echo base_url('items/form') ?>">Add</a> -->
             <p class="text-danger">Add Multiple name with comma for eg(a,b,c)</p>
             <?php echo form_open('items/form'); ?>                
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" class="form-control">
                             <p class="text-danger"><?php echo form_error('name'); ?></p>
                         </div>                       
                     </div>
-                </div>
-                <?php echo form_hidden($csrf); ?>                
-                <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>
+                    <div class="col-md-4">
+                        <div class="form-group pt-4">
+                            <?php echo form_hidden($csrf); ?>                
+                            <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>               
              <?php echo form_close();?>
         </div>
         <div class="card-body">

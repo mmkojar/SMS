@@ -97,10 +97,10 @@ INSERT INTO `sms_available` (`id`, `item_id`, `unit`, `qty`, `rate`, `date`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nz_department`
+-- Table structure for table `nz_subitem`
 --
 
-CREATE TABLE `nz_department` (
+CREATE TABLE `nz_subitem` (
   `id` int(11) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -108,10 +108,10 @@ CREATE TABLE `nz_department` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `nz_department`
+-- Dumping data for table `nz_subitem`
 --
 
-INSERT INTO `nz_department` (`id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `nz_subitem` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (2, 'MASALA', '2022-03-17 07:27:56', '2022-06-13 09:53:03'),
 (3, 'CHICKEN', '2022-03-20 12:29:53', '2022-06-13 09:53:19'),
 (4, 'MUTTON', '2022-06-13 09:55:51', NULL),
@@ -531,9 +531,9 @@ ALTER TABLE `sms_available`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `nz_department`
+-- Indexes for table `nz_subitem`
 --
-ALTER TABLE `nz_department`
+ALTER TABLE `nz_subitem`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -611,9 +611,9 @@ ALTER TABLE `sms_available`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `nz_department`
+-- AUTO_INCREMENT for table `nz_subitem`
 --
-ALTER TABLE `nz_department`
+ALTER TABLE `nz_subitem`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
@@ -667,13 +667,13 @@ ALTER TABLE `years_list`
 --
 ALTER TABLE `nz_purchase`
   ADD CONSTRAINT `nz_purchase_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `nz_vendors` (`id`),
-  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
+  ADD CONSTRAINT `nz_purchase_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_subitem` (`id`);
 
 --
 -- Constraints for table `nz_selling`
 --
 ALTER TABLE `nz_selling`
-  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_department` (`id`);
+  ADD CONSTRAINT `nz_selling_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `nz_subitem` (`id`);
 
 --
 -- Constraints for table `users_groups`

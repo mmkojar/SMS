@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="row">
                    <div class="col-md-6 col-lg-3 col-xlg-3">
-                        <a href="<?php echo base_url('purchase') ?>">
+                        <a href="<?php echo base_url('stocks') ?>">
                             <div class="card card-hover">
                                 <div class="box bg-cyan text-center">
                                     <h6 class="text-white">Total Purchase</h6>
@@ -37,7 +37,7 @@
                     </div>
                     <!-- Column -->
                     <div class="col-md-6 col-lg-3 col-xlg-3">
-                        <a href="<?php echo base_url('selling') ?>">
+                        <a href="<?php echo base_url('stocks') ?>">
                             <div class="card card-hover">
                                 <div class="box bg-success text-center">
                                     <h6 class="text-white">Total Sell</h6>

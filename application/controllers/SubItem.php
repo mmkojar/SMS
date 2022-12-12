@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Department extends CI_Controller {
+class SubItem extends CI_Controller {
 
 	public $data = [];
 	public $error = '';
@@ -29,11 +29,12 @@ class Department extends CI_Controller {
 
 	public function index() {
 
-		$this->data['title'] = 'Sub-Items';            
-
-		$this->data['departments'] = $this->Crud_model->get('nz_department','');
+		$this->data['title'] = 'Sub-Items';
+		$this->data['items'] = $this->Crud_model->get('nz_items');
+		$this->data['csrf'] = $this->_get_csrf_nonce();
+		$this->data['subitems'] = $this->Crud_model->get('nz_subitem','');
 		
-		$this->_render_page('pages/Department/' . DIRECTORY_SEPARATOR . 'index', $this->data);
+		$this->_render_page('pages/SubItem/' . DIRECTORY_SEPARATOR . 'index', $this->data);
 	}
 
 	public function form($id = FALSE) {
@@ -43,7 +44,7 @@ class Department extends CI_Controller {
 		$this->form_validation->set_rules('item_id','Item','trim|required');
 		
 		$id ? $this->form_validation->set_rules('name','Name','trim|required')
-		:  $this->form_validation->set_rules('name','Name','trim|required|is_unique[nz_department.name]');
+		:  $this->form_validation->set_rules('name','Name','trim|required|is_unique[nz_subitem.name]');
 
 		if ($this->form_validation->run() === TRUE)
 		{									
@@ -52,23 +53,23 @@ class Department extends CI_Controller {
 					'item_id' => trim($this->input->post('item_id')),
 					'name' => trim($this->input->post('name')),
 				];
-				$this->db->select('nz_department.*');
-				$this->db->from('nz_department');
-				$this->db->where(['nz_department.name'=> $this->input->post('name'),'nz_department.item_id'=>$this->input->post('item_id')]);
+				/* $this->db->select('nz_subitem.*');
+				$this->db->from('nz_subitem');
+				$this->db->where(['nz_subitem.name'=> $this->input->post('name'),'nz_subitem.item_id'=>$this->input->post('item_id')]);
 				$query=$this->db->get();
 				$res =  $query->row();
 				if($res) {
 					if($res->name !== $this->input->post('hidden_item')) {
-						$this->session->set_flashdata('error', 'Department Name Already Exists with same Item');
-						redirect("department/form/".$id, 'refresh');						
+						$this->session->set_flashdata('error', 'SubItem Name Already Exists with same Item');
+						redirect("SubItem/form/".$id, 'refresh');						
 					}
-				}				
+				} */				
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
 
-				$this->Crud_model->update('nz_department',$id,$additional_data);
+				$this->Crud_model->update('nz_subitem',$id,$additional_data);
 
 				$this->session->set_flashdata('success', 'Record Updated Successfully');
-				redirect("department", 'refresh');
+				redirect("SubItem", 'refresh');
 			}
 			else {
 
@@ -79,11 +80,11 @@ class Department extends CI_Controller {
 						'name' => $collection[$i],
 						'created_at' => date('Y-m-d h:i:s')
 					];
-					$this->Crud_model->insert('nz_department',$insert_data);
+					$this->Crud_model->insert('nz_subitem',$insert_data);
                 }
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
-				redirect("department", 'refresh');
+				redirect("SubItem", 'refresh');
 			}
 		}
 		else
@@ -92,14 +93,16 @@ class Department extends CI_Controller {
 			$this->data['items'] = $this->Crud_model->get('nz_items');
 			if($id) {
 				$this->data['title'] = "Edit Sub-Items";
-				$this->data['department'] = $this->Crud_model->get('nz_department',$id);
+				$this->data['subitem'] = $this->Crud_model->get('nz_subitem',$id);
+				$this->_render_page('pages/SubItem/' . DIRECTORY_SEPARATOR . 'form', $this->data);
 
 			}	
 			else {
-				$this->data['title'] = 'Add Sub-Items';
+				$this->data['subitems'] = $this->Crud_model->get('nz_subitem','');
+				$this->_render_page('pages/SubItem/' . DIRECTORY_SEPARATOR . 'index', $this->data);
 				
 			}			
-			$this->_render_page('pages/Department/' . DIRECTORY_SEPARATOR . 'form', $this->data);
+			
 		}
     }
 
@@ -108,13 +111,13 @@ class Department extends CI_Controller {
 		$del = $this->Crud_model->getByItemId('nz_purchase',$id,'sub_item_id');
 		
 		if(count($del) > 0) {
-			$this->session->set_flashdata('error', 'Department Already In-use Cannot be Deleted');
-			redirect("department", 'refresh');
+			$this->session->set_flashdata('error', 'SubItem Already In-use Cannot be Deleted');
+			redirect("SubItem", 'refresh');
 		}
 		else {
-			$this->Crud_model->delete('nz_department',$id);
+			$this->Crud_model->delete('nz_subitem',$id);
 			$this->session->set_flashdata('success', 'Record Deleted Successfully');
-			redirect("department", 'refresh');
+			redirect("SubItem", 'refresh');
 		}
     }
 

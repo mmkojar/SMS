@@ -15,11 +15,11 @@ class Report_model extends CI_Model
 	public function get($table,$mt,$yr) {
 		
 		if($table == 'nz_purchase' || $table == 'nz_selling') {
-			$this->db->select($table.".*,nz_items.name as item_name,nz_department.name as depart_name,nz_vendors.name as vendor_name");
+			$this->db->select($table.".*,nz_items.name as item_name,nz_subitem.name as depart_name,nz_vendors.name as vendor_name");
 			$this->db->from($table);
 			$this->db->join('nz_items',"nz_items.id = ".$table.".item_id","left");
 			$this->db->join('nz_vendors',"nz_vendors.id =".$table.".vendor_id","left");
-			$this->db->join('nz_department',"nz_department.id = ".$table.".sub_item_id","left");
+			$this->db->join('nz_subitem',"nz_subitem.id = ".$table.".sub_item_id","left");
 		}
 		else {
 			$this->db->select($table.'.*');

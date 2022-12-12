@@ -130,7 +130,7 @@ class Selling extends CI_Controller {
 			$this->data['items'] = $this->Crud_model->get('nz_items','');	
         	$this->data['selling'] = $this->Crud_model->get('nz_selling',$id);
 			$this->data['vendors'] = $this->Crud_model->get('nz_vendors','');	
-        	$this->data['departs'] = $this->Crud_model->get('nz_department','');
+        	$this->data['departs'] = $this->Crud_model->get('nz_subitem','');
 
         	$this->data['csrf'] = $this->_get_csrf_nonce();
 

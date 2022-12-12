@@ -5,7 +5,7 @@
         <div class="card-header">
             <h4 class="float-left mb-0 mt-2"><?php echo $title; ?></h4>
         </div>
-        <div class="card-body pt-2">
+        <div class="card-body">
             <form action="" method="POST" id="saveForm">
                 <div class="row">
 					<!-- Multiple Add Form -->
@@ -19,7 +19,7 @@
                                     <tr>
 										<th>PO.NO</th>
                             			<th>Vendor Name</th>
-                                        <th>Item Name</th>
+                                        <th>Item</th>
 										<th>Sub-Item</th>
                                         <!-- <th>unit</th> -->
                                         <th>Qty</th>
@@ -166,18 +166,18 @@
             count += 1;
             var html = '';
             html += '<tr>';
-			html += '<td><input type="text" id="po_no_' + count + '" data-sub_item='+count+' name="po_no[]" class="form-control po_no" placeholder=""/></td>';
-            html += '<td><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
-            html += '<td><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_'+count+'"><option value="" selected>--select--</option><?php print_r($items); ?></select></td>';
-            html += '<td><select class="form-control sub_item_id select2" name="sub_item_id[]" data-sub_item='+count+' id="sub_item_id_' + count + '"></select></td>';
+			html += '<td width="10%"><input type="text" id="po_no_' + count + '" data-sub_item='+count+' name="po_no[]" class="form-control po_no" placeholder=""/></td>';
+            html += '<td width="20%"><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
+            html += '<td width="20%"><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_'+count+'"><option value="" selected>--select--</option><?php print_r($items); ?></select></td>';
+            html += '<td width="20%"><select class="form-control sub_item_id select2" name="sub_item_id[]" data-sub_item='+count+' id="sub_item_id_' + count + '"></select></td>';
             // html += '<td><select class="form-control unit" name="unit[]" data-sub_item='+count+' id="unit_' + count + '"><option value="">Select</option><option value="GRAM">GRAM</option><option value="KG">KG</option><option value="LTR">LTR</option><option value="BOX">BOX</option><option value="PCS">PCS</option></select></td>';
-            html += '<td><input type="number" min="1" id="qty_' + count + '" data-sub_item='+count+' name="qty[]" class="form-control qty" placeholder=""/>';
+            html += '<td width="10%"><input type="number" min="1" id="qty_' + count + '" data-sub_item='+count+' name="qty[]" class="form-control qty" placeholder=""/>';
             // html += '<td><input type="number" min="1" id="purchase_rate_' + count + '" data-sub_item='+count+' name="purchase_rate_[]" class="form-control purchase_rate" readonly placeholder=""/>';
-            html += '<td><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';
+            html += '<td width="10%"><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';
             // html += '<td><select class="form-control outlet" name="outlet[]" data-sub_item='+count+' id="outlet_' + count + '"><option value="">Select</option><option value="Naaz Kamani">Naaz Kamani</option><option value="Naaz Jarimari">Naaz Jarimari</option><option value="Parel">Parel</option><option value="Patel">Patel</option><option value="Metro">Metro</option><option value="Naaz Executive">Naaz Executive</option><option value="Other">Other</option></select></td>';
-            html += '<td><input type="date" id="date_' + count + '" data-sub_item='+count+' name="date[]" class="form-control date" placeholder=""/>';
-            html += '<td><div class="delete_row text-center"><i class="btn btn-sm btn-danger mdi mdi-minus-circle"></i></div></td>';
-            html += `<td><input type="hidden" id="hidden_qty_${count }" name="hidden_qty[]" class="form-control" />`;
+            html += '<td width="10%"><input type="date" id="date_' + count + '" data-sub_item='+count+' name="date[]" class="form-control date" placeholder=""/>';
+            html += '<td width="10%"><div class="delete_row text-center"><i class="btn btn-sm btn-danger mdi mdi-minus-circle"></i></div></td>';
+            html += `<td width="10%"><input type="hidden" id="hidden_qty_${count }" name="hidden_qty[]" class="form-control" />`;
             $('#append_rows').append(html);
         }
 

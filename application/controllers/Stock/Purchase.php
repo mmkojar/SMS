@@ -160,7 +160,7 @@ class Purchase extends CI_Controller {
         	$this->data['purchase'] = $this->Crud_model->get('nz_purchase',$id);
 			$this->data['items'] = $this->Crud_model->get('nz_items','');
 			$this->data['vendors'] = $this->Crud_model->get('nz_vendors','');
-			$this->data['departs'] = $this->Crud_model->get('nz_department','');
+			$this->data['departs'] = $this->Crud_model->get('nz_subitem','');
 			
         	$this->data['csrf'] = $this->_get_csrf_nonce();
 
@@ -188,7 +188,7 @@ class Purchase extends CI_Controller {
     }
 
 	public function getSubItemOnChange($id) {
-		$query = $this->db->query('SELECT * FROM `nz_department` WHERE item_id='.$id);
+		$query = $this->db->query('SELECT * FROM `nz_subitem` WHERE item_id='.$id);
 		$res = $query->result_array();
 		print_r(json_encode($res));
 	}
