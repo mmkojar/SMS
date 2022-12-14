@@ -7,7 +7,7 @@
             <!-- <h4 class="float-left mb-0 mt-2"><s?php echo $title; ?></h4> -->
             <!-- <a class="btn btn-info float-right" href="<s?php echo base_url('department/form') ?>">Add</a> -->
             <p class="text-danger">Add Multiple name with comma for eg(a,b,c)</p>
-            <?php echo form_open('subitem/form'); ?>                
+            <?php echo form_open('SubItem/form'); ?>                
                 <div class="row">  
                     <div class="col-md-4">
                         <div class="form-group">
