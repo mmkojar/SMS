@@ -159,8 +159,10 @@ class Selling extends CI_Controller {
 		
 		$queryp = $this->db->query('SELECT * FROM `nz_purchase` WHERE item_id='.$_POST['item_id'].' && sub_item_id='.$_POST['sub_item_id'])->result();
 		$pqty = 0;
+		$rate = '';
 		foreach ($queryp as $val) {
 			$pqty += $val->qty;
+			$rate = $val->rate;
 		}
 		$querys = $this->db->query('SELECT * FROM `nz_selling` WHERE item_id='.$_POST['item_id'].' && sub_item_id='.$_POST['sub_item_id'])->result();
 		$sqty = 0;
@@ -169,7 +171,7 @@ class Selling extends CI_Controller {
 		}
 		$data = $pqty-$sqty;
     	// $data = $this->Crud_model->getStockAvail($id,$sid);
-    	print_r(($data));
+    	print_r(json_encode(['qty'=>$data,'rate'=>$rate]));
     }
     
 	public function _get_csrf_nonce()

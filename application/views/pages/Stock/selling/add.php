@@ -21,11 +21,8 @@
                             			<th>Vendor Name</th>
                                         <th>Item</th>
 										<th>Sub-Item</th>
-                                        <!-- <th>unit</th> -->
                                         <th>Qty</th>
-                                        <!-- <th>Purchase Rate</th> -->
                                         <th>Selling Rate</th>
-                                        <!-- <th>Outlet</th> -->
                                         <th>Date</th>
                                         <th width="50px" id="remove_rows">
                                             <div class="add_row text-center"><i class="btn btn-sm btn-info mdi mdi-plus-circle"></i></div>
@@ -169,12 +166,9 @@
 			html += '<td width="10%"><input type="text" id="po_no_' + count + '" data-sub_item='+count+' name="po_no[]" class="form-control po_no" placeholder=""/></td>';
             html += '<td width="20%"><select class="form-control vendor_id select2" data-sub_item='+count+' name="vendor_id[]" id="vendor_id_' + count + '"><option value="" selected>--select--</option><?php print_r($vendors) ?></select></td>';
             html += '<td width="20%"><select class="form-control item_id select2" data-sub_item='+count+' name="item_id[]" id="item_id_'+count+'"><option value="" selected>--select--</option><?php print_r($items); ?></select></td>';
-            html += '<td width="20%"><select class="form-control sub_item_id select2" name="sub_item_id[]" data-sub_item='+count+' id="sub_item_id_' + count + '"></select></td>';
-            // html += '<td><select class="form-control unit" name="unit[]" data-sub_item='+count+' id="unit_' + count + '"><option value="">Select</option><option value="GRAM">GRAM</option><option value="KG">KG</option><option value="LTR">LTR</option><option value="BOX">BOX</option><option value="PCS">PCS</option></select></td>';
+            html += '<td width="20%"><select class="form-control sub_item_id select2" name="sub_item_id[]" data-sub_item='+count+' id="sub_item_id_' + count + '"></select></td>';           
             html += '<td width="10%"><input type="number" min="1" id="qty_' + count + '" data-sub_item='+count+' name="qty[]" class="form-control qty" placeholder=""/>';
-            // html += '<td><input type="number" min="1" id="purchase_rate_' + count + '" data-sub_item='+count+' name="purchase_rate_[]" class="form-control purchase_rate" readonly placeholder=""/>';
-            html += '<td width="10%"><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';
-            // html += '<td><select class="form-control outlet" name="outlet[]" data-sub_item='+count+' id="outlet_' + count + '"><option value="">Select</option><option value="Naaz Kamani">Naaz Kamani</option><option value="Naaz Jarimari">Naaz Jarimari</option><option value="Parel">Parel</option><option value="Patel">Patel</option><option value="Metro">Metro</option><option value="Naaz Executive">Naaz Executive</option><option value="Other">Other</option></select></td>';
+            html += '<td width="10%"><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';            
             html += '<td width="10%"><input type="date" id="date_' + count + '" data-sub_item='+count+' name="date[]" class="form-control date" placeholder=""/>';
             html += '<td width="10%"><div class="delete_row text-center"><i class="btn btn-sm btn-danger mdi mdi-minus-circle"></i></div></td>';
             html += `<td width="10%"><input type="hidden" id="hidden_qty_${count }" name="hidden_qty[]" class="form-control" />`;
@@ -212,30 +206,40 @@
                         
 			var countitems = $(this).data('sub_item');
 			var dropdownvalue = $(this).val();
-			$.ajax({
-				url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
-                method:"GET",
-                dataType:'json',
-                success:function(res)
-                {
-					var html = '';
-					if(res.length > 0) {
-						$('#qty_'+countitems).val(0);
-						$('#hidden_qty_'+countitems).val(0);
-						$('#qty_'+countitems).removeAttr('max');
-
-						html += '<option value="">Select</option>';
-						for(var i in res) {
-							html += `<option value="${res[i].id}">${res[i].name}</option>`;
+			if(dropdownvalue !== '') {
+				$.ajax({
+					url:"<?php echo base_url('Stock/purchase/getSubItemOnChange') ?>/"+dropdownvalue,
+					method:"GET",
+					dataType:'json',
+					success:function(res)
+					{
+						var html = '';
+						if(res.length > 0) {
+							$('#qty_'+countitems).val(0);
+							$('#hidden_qty_'+countitems).val(0);
+							$('#qty_'+countitems).removeAttr('max');
+							$('#rate_'+countitems).val(0);
+							html += '<option value="" readonly>Select</option>';
+							for(var i in res) {
+								html += `<option value="${res[i].id}">${res[i].name}</option>`;
+							}
 						}
+						else {
+							html += '<option value="0">No Data Dound</option>';
+							onChangeSubitem(dropdownvalue,0,countitems)
+						}
+						$('#sub_item_id_'+countitems).html(html);         
 					}
-					else {
-						html += '<option value="0">No Data Dound</option>';
-						onChangeSubitem(dropdownvalue,0,countitems)
-					}
-					$('#sub_item_id_'+countitems).html(html);         
-                }
-            })
+				})
+			}
+			else {
+				$('#qty_'+countitems).val(0);
+				$('#hidden_qty_'+countitems).val(0);
+				$('#qty_'+countitems).removeAttr('max');
+				$('#rate_'+countitems).val(0);
+				$('#sub_item_id_'+countitems).html('');
+			}
+			
             
         });
 
@@ -250,20 +254,20 @@
 				data:{item_id:id,sub_item_id:sid},
 				dataType:'json',
 				success:function(res)
-				{
-					if(res !== 0) {
-						$('#qty_'+countitems).val(res);
-						$('#hidden_qty_'+countitems).val(res);
-						$('#qty_'+countitems).attr('max',res);
+				{				
+					if(res) {
+						$('#qty_'+countitems).val(res.qty);
+						$('#hidden_qty_'+countitems).val(res.qty);
+						$('#qty_'+countitems).attr('max',res.qty);
 						// $('#purchase_rate_'+countitems).val(res[0].rate);
-						// $('#rate').val(res.selling_rate);
+						$('#rate_'+countitems).val(res.rate);
 					} 
 					else {
 						$('#qty_'+countitems).val(0);
 						$('#hidden_qty_'+countitems).val(0);
 						$('#qty_'+countitems).removeAttr('max');
-					}
-					
+						$('#rate_'+countitems).val(0);
+					}					
 				}
 			})
 		}
@@ -275,8 +279,13 @@
 			var sub_item_id = $(this).val();
 
 			if(sub_item_id !== "") {
-
 				onChangeSubitem(item_id,sub_item_id,countitems)
+			}
+			else {
+				$('#qty_'+countitems).val(0);
+				$('#hidden_qty_'+countitems).val(0);
+				$('#qty_'+countitems).removeAttr('max');
+				$('#rate_'+countitems).val(0);
 			}
 			
 		});
