@@ -17,6 +17,7 @@
                             <th>Contact No.</th>
                             <th>Address</th>
                             <th>GSTIN</th>
+                            <th>GST%</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
@@ -31,6 +32,7 @@
                             <td><?php echo $row->phone ?></td>
                             <td><?php echo $row->address ?></td>
                             <td><?php echo $row->gstin ?></td>
+                            <td><?php echo $row->gst_per ?></td>
                             <td><?php echo $row->created_at ?></td>
                             <td><?php echo $row->updated_at ?></td>
                             <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('vendors/form/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;<a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('vendors/delete/'.$row->id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>

@@ -23,6 +23,8 @@
                                     <th>Qty</th>
                                     <th>Rate</th>
                                     <th>Total Amount</th>
+                                    <th>GST</th>
+                                    <th>Final Total</th>
                                     <th>Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -37,6 +39,8 @@
                                     <td><?php echo $row->qty ?></td>
                                     <td><?php echo $row->rate ?></td>
                                     <td><?php echo $row->total_amount ?></td>
+                                    <td><?php echo $row->gst ?></td>
+                                    <td><?php echo $row->final_total ?></td>
                                     <td><?php echo $row->date ?></td>
                                     <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('expense/form/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;<a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('expense/delete/'.$row->id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                                 </tr>
@@ -129,8 +133,8 @@
                 success:function(res) {
                     $(".preloader").hide();
                     var  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                    const saletot = res.sell.map((res)=> Number(res.total_amount)).reduce((total,count) => total+count,0);
-                    const exptot = res.expense.map((res)=> Number(res.total_amount)).reduce((total,count) => total+count,0);
+                    const saletot = res.sell.map((res)=> Number(res.final_total)).reduce((total,count) => total+count,0);
+                    const exptot = res.expense.map((res)=> Number(res.final_total)).reduce((total,count) => total+count,0);
                     var html = `
                         <thead>
                             <tr>

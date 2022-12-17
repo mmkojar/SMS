@@ -51,7 +51,8 @@ class Vendors extends CI_Controller {
 				'name' => trim($this->input->post('name')),
 				'phone' => $this->input->post('phone'),
 				'address' => $this->input->post('address'),
-				'gstin' => $this->input->post('gstin')
+				'gstin' => $this->input->post('gstin'),
+				'gst_per' => $this->input->post('gst_per')
 			];
 
 			if($id) {
@@ -128,6 +129,13 @@ class Vendors extends CI_Controller {
 		$data = $this->Crud_model->get('nz_purchase','');
 		print_r(json_encode($data));
     }
+
+	public function gstapi() {
+		$query = $this->db->query('SELECT * FROM nz_vendors WHERE id='.$_POST['vid']);
+		$data = $query->row_array();
+		print_r(json_encode($data));
+		
+	}
 	
 	public function _get_csrf_nonce()
 	{

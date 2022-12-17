@@ -38,15 +38,19 @@ class Expense extends CI_Controller {
 		{						
 			
 			if($id) {
+				$total = $_POST['qty'][0]*$_POST['rate'][0];
+				$gst = $this->input->post('gst_perc')[0];
 				$additional_data = [
-					'vendor_id' => trim($this->input->post('vendor_id')),
-					'bill_no' => trim($this->input->post('bill_no')),
-					'item' => $this->input->post('item'),
-					'qty' => $this->input->post('qty'),
-					'rate' => $this->input->post('rate'),
-					'total_amount' => $this->input->post('qty')*$this->input->post('rate'),
-					'date' => $this->input->post('date'),
-				];				
+					'vendor_id' => trim($this->input->post('vendor_id')[0]),
+					'bill_no' => trim($this->input->post('bill_no')[0]),
+					'item' => $this->input->post('item')[0],
+					'qty' => $this->input->post('qty')[0],
+					'rate' => $this->input->post('rate')[0],
+					'total_amount' => $total,
+					'gst' => $gst,
+					'final_total' => ($gst/100*$total)+$total,
+					'date' => $this->input->post('date')[0],
+				];
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
 
 				$this->Crud_model->update('expenses',$id,$additional_data);
@@ -60,14 +64,17 @@ class Expense extends CI_Controller {
 				$_POST['rate'] = (explode(',',$_POST['rate'][0]));
 
 				for($i = 0; $i < count($_POST['item']); $i++) {
+					$total = $_POST['qty'][$i]*$_POST['rate'][$i];
 					$insert_data = [
 						'vendor_id' => $_POST['vendor_id'][0],
 						'bill_no' => $_POST['bill_no'][0],
 						'item' => $_POST['item'][$i],
 						'qty' => $_POST['qty'][$i],
 						'rate' => $_POST['rate'][$i],
-						'total_amount' => $_POST['qty'][$i]*$_POST['rate'][$i],
+						'total_amount' => $total,
 						'date' => $_POST['date'][0],
+						'gst' => $_POST['gst_perc'][0],
+						'final_total' => ($_POST['gst_perc'][0]/100*$total)+$total,
 						'created_at' => date('Y-m-d h:i:s')
 					];
 					$this->Crud_model->insert('expenses',$insert_data);

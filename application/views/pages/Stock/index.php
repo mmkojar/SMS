@@ -26,7 +26,7 @@
                                     <th>PO.No</th>
                                     <th>Vendor Name</th>
                                     <th>Item Name</th>
-                                    <th>Sub-Item</th>
+                                    <th>Job-Order</th>
                                     <th>Qty</th>
                                     <th>Purchase Rate</th>
                                     <th>Total Amount</th>
@@ -70,13 +70,15 @@
                             <thead>
                                 <tr>
                                     <th>Sr.No</th>
-                                    <th>PO.No</th>
+                                    <th>Bill No</th>
                                     <th>Vendor Name</th>
                                     <th>Item Name</th>
-                                    <th>Sub-Item</th>
+                                    <th>Job-Order</th>
                                     <th>Qty</th>
                                     <th>Selling Rate</th>
                                     <th>Total Amount</th>
+                                    <th>GST</th>
+                                    <th>Final Total</th>
                                     <th>Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -93,6 +95,8 @@
                                     <td class="font-weight-bold"><?php echo $row->qty ?></td>
                                     <td><?php echo $row->rate ?></td>
                                     <td><?php echo $row->total_amount ?></td>
+                                    <td><?php echo $row->gst ?></td>
+                                    <td><?php echo $row->final_total ?></td>
                                     <td><?php echo $row->date ?></td>
                                     <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('selling/edit/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;
                                     <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('selling/delete/'.$row->id.'/'.$row->item_id.'/'.$row->sub_item_id.'/'.$row->qty) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
@@ -102,7 +106,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="7" style="text-align:right">Total:</th>
+                                    <th colspan="9" style="text-align:right">Total:</th>
                                     <th></th>
                                     <th colspan="2"></th>
                                 </tr>
@@ -117,7 +121,7 @@
                                 <tr>
                                     <th>Sr.No</th>
                                     <th>Item Name</th>
-                                    <th>Sub-Item</th>
+                                    <th>Job-Order</th>
                                     <th>Purchase Qty</th>
                                     <th>Sale Qty</th>
                                     <th>Qty Remaining</th>
@@ -153,7 +157,7 @@
     
     $(document).ready(function() {
         
-        $('#stocks_dt1,#stocks_dt2').DataTable({
+        $('#stocks_dt1').DataTable({
             dom: 'lBfrtip',
             buttons: [
                'excel'
@@ -185,6 +189,41 @@
 	
 				// Update footer
 				$(api.column(7).footer()).html(pageTotal + ' ( ' + total + ' total)');
+			},
+        });
+
+        $('#stocks_dt2').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+               'excel'
+            ],
+            responsive: true,
+			footerCallback: function (row, data, start, end, display) {
+				var api = this.api();
+	
+				// Remove the formatting to get integer data for summation
+				var intVal = function (i) {
+					return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+				};
+	
+				// Total over all pages
+				total = api
+					.column(9)
+					.data()
+					.reduce(function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0);
+	
+				// Total over this page
+				pageTotal = api
+					.column(9, { page: 'current' })
+					.data()
+					.reduce(function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0);
+	
+				// Update footer
+				$(api.column(9).footer()).html(pageTotal + ' ( ' + total + ' total)');
 			},
         });
 
@@ -242,7 +281,7 @@
                         <thead>
                             <tr>
                                 <th>Item Name</th>
-                                <th>Sub-Item</th>
+                                <th>Job-Order</th>
                                 <th>Purchase Qty</th>
                                 <th>Sale Qty</th>
                                 <th>Qty Remaining</th>

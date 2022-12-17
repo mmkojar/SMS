@@ -16,7 +16,7 @@
                                     <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-key-plus"></i><span class="hide-menu">Masters </span></a>
                                         <ul aria-expanded="false" class="collapse  first-level">            
                                             <li class="sidebar-item"><a href="<?php echo base_url('Items') ?>" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Items </span></a></li>
-                                            <li class="sidebar-item"><a href="<?php echo base_url('subItem') ?>" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Sub-Item </span></a></li>
+                                            <li class="sidebar-item"><a href="<?php echo base_url('subItem') ?>" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Job-Order </span></a></li>
                                             <li class="sidebar-item"><a href="<?php echo base_url('vendors') ?>" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Vendors </span></a></li>
                                         </ul>
                                     </li>

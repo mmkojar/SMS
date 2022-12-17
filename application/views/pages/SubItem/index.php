@@ -46,7 +46,7 @@
                         <tr>
                             <th>Sr.No</th>
                             <th>Item Name</th>
-                            <th>Sub-Item</th>
+                            <th>Job-Order</th>
                             <th>Created At</th>
                             <th>Action</th>
                         </tr>

@@ -23,7 +23,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="vendor_id">Vendor Name</label>
-                            <select name="vendor_id" class="form-control">
+                            <select name="vendor_id" id="vendor_id" class="form-control">
                                 <?php foreach($vendors as $row): ?>
                                     <option value="<?php echo $row->id ?>"
                                         <?php echo ($row->id == $selling['vendor_id']) ? 'selected' : '' ?>><?php echo $row->name; ?>
@@ -86,6 +86,7 @@
                     </div>
                 </div>
                 <?php echo form_hidden($csrf); ?>
+                <input type="hidden" id="gst_perc" name="gst_perc" value="<?php echo isset($selling['gst']) ? $selling['gst'] : '' ?>">
                 <input type="hidden" name="total_qty" value="<?php echo isset($selling['tqty']) ? $selling['tqty'] : '' ?>">
                 <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>
              <?php echo form_close();?>
@@ -120,5 +121,21 @@
                 }
             })
         });
+
+        $("#vendor_id").on('change', ()=> {
+
+            var vid = $("#vendor_id").val();
+            $.ajax({
+                url:"<?php echo base_url('Vendors/gstapi') ?>",
+                method:"POST",
+                data:{vid:vid},
+                dataType:'json',
+                success:function(res)
+                {
+                    $("#gst_perc").val(res.gst_per);
+                }
+            })
+        })
+
     })
 </script>

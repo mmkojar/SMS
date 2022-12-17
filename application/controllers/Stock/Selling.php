@@ -56,7 +56,7 @@ class Selling extends CI_Controller {
     		for($i = 0; $i < count($_POST["item_id"]); $i++)
 	    	{		
 	    		if(!empty($_POST["item_id"][$i])) {
-
+					$total = $_POST["qty"][$i]*$_POST["rate"][$i];
 		    		$additional_data = [
 		    			'po_no' => $_POST["po_no"][$i],
 		    			'vendor_id' => $_POST["vendor_id"][$i],
@@ -64,7 +64,9 @@ class Selling extends CI_Controller {
 		    			'sub_item_id' => isset($_POST["sub_item_id"][$i]) ? $_POST["sub_item_id"][$i] : '0',
 		    			'qty' => $_POST["qty"][$i],
 		    			'rate' => $_POST["rate"][$i],
-		    			'total_amount' => $_POST["qty"][$i]*$_POST["rate"][$i],
+		    			'total_amount' => $total,
+						'gst' => $_POST['gst_perc'][$i],
+						'final_total' => ($_POST['gst_perc'][$i]/100*$total)+$total,
 		    			'date' => $_POST["date"][$i],
 		    			'created_at' => date('Y-m-d h:i:s'),
 		    		];
@@ -93,6 +95,7 @@ class Selling extends CI_Controller {
 
 		if ($this->form_validation->run() === TRUE)
 		{
+			 $total = $_POST["qty"]*$_POST["rate"];
 			 $additional_data = [
 				'po_no' => $this->input->post("po_no"),
 				'vendor_id' => $this->input->post("vendor_id"),
@@ -100,8 +103,10 @@ class Selling extends CI_Controller {
 		    	'sub_item_id' => isset($_POST["sub_item_id"]) ? $_POST["sub_item_id"] : '0',
 				'qty' => $this->input->post("qty"),
 				'rate' => $this->input->post("rate"),
-				'total_amount' => $this->input->post("qty")*$this->input->post("rate"),
+				'total_amount' => $total,
 				'date' => $this->input->post("date"),
+				'gst' => $_POST['gst_perc'],
+				'final_total' => ($_POST['gst_perc']/100*$total)+$total,
 				'updated_at' => date('Y-m-d h:i:s'),
 			];
 

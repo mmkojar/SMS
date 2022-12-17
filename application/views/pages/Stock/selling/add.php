@@ -17,7 +17,7 @@
                             <table id="multi_form" class="table table-striped table-bordered table-responsive-md" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-										<th>PO.NO</th>
+										<th>Bill No</th>
                             			<th>Vendor Name</th>
                                         <th>Item</th>
 										<th>Sub-Item</th>
@@ -171,7 +171,8 @@
             html += '<td width="10%"><input type="number" min="1" id="rate_' + count + '" data-sub_item='+count+' name="rate[]" class="form-control rate" placeholder=""/>';            
             html += '<td width="10%"><input type="date" id="date_' + count + '" data-sub_item='+count+' name="date[]" class="form-control date" placeholder=""/>';
             html += '<td width="10%"><div class="delete_row text-center"><i class="btn btn-sm btn-danger mdi mdi-minus-circle"></i></div></td>';
-            html += `<td width="10%"><input type="hidden" id="hidden_qty_${count }" name="hidden_qty[]" class="form-control" />`;
+			html += `<td width="5%"><input type="hidden" id="gst_perc_${count}" name="gst_perc[]"></td>`;
+            html += `<td width="5%"><input type="hidden" id="hidden_qty_${count}" name="hidden_qty[]" class="form-control" />`;
             $('#append_rows').append(html);
         }
 
@@ -201,6 +202,23 @@
                 $("#saveBtn").show();
             } 
         });
+
+		$(document).on('change', '.vendor_id', function() {
+
+			var vid = $(this).val();
+			var countitems = $(this).data('sub_item');
+
+			$.ajax({
+				url:"<?php echo base_url('Vendors/gstapi') ?>",
+				method:"POST",
+				data:{vid:vid},
+				dataType:'json',
+				success:function(res)
+				{
+					$("#gst_perc_"+countitems).val(res.gst_per);
+				}
+			})
+		})
 
         $(document).on('change', '.item_id', function(){
                         

@@ -39,6 +39,14 @@
                             <p class="text-danger"><?php echo form_error('gstin'); ?></p>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gstin">GST %</label>
+                            <input type="number" name="gst_per" id="gst_per" class="form-control"  
+                            value="<?php echo isset($vendor['gst_per']) ? $vendor['gst_per'] : '' ?>">
+                            <p class="text-danger"><?php echo form_error('gst_per'); ?></p>
+                        </div>
+                    </div>
                 </div>
                 <?php echo form_hidden($csrf); ?>                
                 <button type="submit" name="submit" id="salary_submit" class="btn btn-success">Save</button>
