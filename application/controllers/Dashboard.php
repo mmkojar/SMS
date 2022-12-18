@@ -40,7 +40,7 @@ class Dashboard extends CI_Controller {
 		
 		$stotal_amt = 0;
 		foreach ($selling as $value) {
-			$stotal_amt += $value->total_amount;
+			$stotal_amt += $value->final_total;
 		}
 		$this->data['stotal_amt'] = $stotal_amt;
 

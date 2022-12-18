@@ -29,8 +29,8 @@
                         <a href="<?php echo base_url('stocks') ?>">
                             <div class="card card-hover">
                                 <div class="box bg-cyan text-center">
-                                    <h6 class="text-white">Total Purchase</h6>
-                                    <h1 class="font-light text-white"><?php echo $ptotal_amt ?></h1>
+                                    <h3 class="text-white">Total Purchase</h3>
+                                    <h3 class="font-light text-white"><?php echo $ptotal_amt ?></h3>
                                 </div>
                             </div>
                         </a>
@@ -40,8 +40,8 @@
                         <a href="<?php echo base_url('stocks') ?>">
                             <div class="card card-hover">
                                 <div class="box bg-success text-center">
-                                    <h6 class="text-white">Total Sell</h6>
-                                    <h1 class="font-light text-white"><?php echo $stotal_amt ?></h1>
+                                    <h3 class="text-white">Total Sell</h3>
+                                    <h3 class="font-light text-white"><?php echo number_format($stotal_amt,2) ?></h3>
                                 </div>
                             </div>
                         </a>
@@ -51,8 +51,8 @@
                         <a href="<?php echo base_url('vendors') ?>">
                             <div class="card card-hover">
                                 <div class="box bg-warning text-center">
-                                    <h6 class="text-white">Vendors</h6>
-                                    <h1 class="font-light text-white"><?php echo $vendors ?></h1>
+                                    <h3 class="text-white">Vendors</h3>
+                                    <h3 class="font-light text-white"><?php echo $vendors ?></h3>
                                 </div>
                             </div>
                         </a>
