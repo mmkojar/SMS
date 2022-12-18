@@ -19,8 +19,8 @@
                                 <tr>
                                     <th>Sr.No</th>
                                     <th>Bill No</th>
-                                    <th>Item Name</th>
-                                    <th>Qty</th>
+                                    <!-- <th>Item Name</th> -->
+                                    <!-- <th>Qty</th> -->
                                     <th>Rate</th>
                                     <th>Total Amount</th>
                                     <th>GST</th>
@@ -35,12 +35,12 @@
                                 <tr>
                                     <td><?php echo $sr_no; ?></td>
                                     <td><?php echo $row->bill_no; ?></td>
-                                    <td><?php echo $row->item ?></td>
-                                    <td><?php echo $row->qty ?></td>
+                                    <!-- <td><s?php echo $row->item ?></td>
+                                    <td><s?php echo $row->qty ?></td> -->
                                     <td><?php echo $row->rate ?></td>
                                     <td><?php echo $row->total_amount ?></td>
                                     <td><?php echo $row->gst ?></td>
-                                    <td><?php echo $row->final_total ?></td>
+                                    <td><?php echo number_format($row->final_total,2) ?></td>
                                     <td><?php echo $row->date ?></td>
                                     <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('expense/form/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;<a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('expense/delete/'.$row->id) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>
                                 </tr>
@@ -149,7 +149,7 @@
                             <tr>
                                 <td>${saletot}</td>
                                 <td>${exptot}</td>
-                                <td>${saletot-exptot}</td>
+                                <td>${saletot-exptot.toFixed(2)}</td>
                                 <td>${mt ? months[Number(mt)-1] : '-'}</td>
                                 <td>${yr ? yr : '-'}</td>
                             </tr>

@@ -208,16 +208,21 @@
 			var vid = $(this).val();
 			var countitems = $(this).data('sub_item');
 
-			$.ajax({
-				url:"<?php echo base_url('Vendors/gstapi') ?>",
-				method:"POST",
-				data:{vid:vid},
-				dataType:'json',
-				success:function(res)
-				{
-					$("#gst_perc_"+countitems).val(res.gst_per);
-				}
-			})
+			if(vid) {
+                $.ajax({
+                    url:"<?php echo base_url('Vendors/gstapi') ?>",
+                    method:"POST",
+                    data:{vid:vid},
+                    dataType:'json',
+                    success:function(res)
+                    {				
+                        $("#gst_perc_"+countitems).val(res.gst_per);
+                    }
+                })
+            }
+            else {
+                $("#gst_perc_"+countitems).val(0);
+            }
 		})
 
         $(document).on('change', '.item_id', function(){

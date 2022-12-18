@@ -91,7 +91,7 @@ class Selling extends CI_Controller {
 
     public function edit($id) {
                     
-		$this->form_validation->set_rules('rate','Selling Rate','required');
+		$this->form_validation->set_rules('vendor_id','Vendor Id','required');
 
 		if ($this->form_validation->run() === TRUE)
 		{

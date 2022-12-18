@@ -32,34 +32,34 @@ class Expense extends CI_Controller {
 
     public function form($id = FALSE) {
         
-		$this->form_validation->set_rules('item[]','Item','trim|required');
+		
+		$this->form_validation->set_rules('vendor_id','Vendor','trim|required');
 
 		if ($this->form_validation->run() === TRUE)
-		{						
-			
+		{
+			$additional_data = [
+				'vendor_id' => trim($this->input->post('vendor_id')),
+				'bill_no' => trim($this->input->post('bill_no')),
+				// 'item' => $this->input->post('item'),
+				// 'qty' => $this->input->post('qty'),
+				'rate' => $this->input->post('rate'),
+				'total_amount' => $_POST['rate'],
+				'gst' => $_POST['gst_perc'],
+				'final_total' => ($_POST['gst_perc']/100*$_POST['rate'])+$_POST['rate'],
+				'date' => $this->input->post('date'),
+			];
+
 			if($id) {
-				$total = $_POST['qty'][0]*$_POST['rate'][0];
-				$gst = $this->input->post('gst_perc')[0];
-				$additional_data = [
-					'vendor_id' => trim($this->input->post('vendor_id')[0]),
-					'bill_no' => trim($this->input->post('bill_no')[0]),
-					'item' => $this->input->post('item')[0],
-					'qty' => $this->input->post('qty')[0],
-					'rate' => $this->input->post('rate')[0],
-					'total_amount' => $total,
-					'gst' => $gst,
-					'final_total' => ($gst/100*$total)+$total,
-					'date' => $this->input->post('date')[0],
-				];
+				
 				$additional_data['updated_at'] = date('Y-m-d h:i:s');
-
 				$this->Crud_model->update('expenses',$id,$additional_data);
-
 				$this->session->set_flashdata('success', 'Record Updated Successfully');
-				redirect("Expense", 'refresh');
+				
 			}
 			else {
-				$_POST['item'] = (explode(',',$_POST['item'][0]));
+				$additional_data['created_at'] = date('Y-m-d h:i:s');
+				$this->Crud_model->insert('expenses',$additional_data);
+				/* $_POST['item'] = (explode(',',$_POST['item'][0]));
 				$_POST['qty'] = (explode(',',$_POST['qty'][0]));
 				$_POST['rate'] = (explode(',',$_POST['rate'][0]));
 
@@ -78,14 +78,14 @@ class Expense extends CI_Controller {
 						'created_at' => date('Y-m-d h:i:s')
 					];
 					$this->Crud_model->insert('expenses',$insert_data);
-                }
+                } */
 
 				$this->session->set_flashdata('success', 'Record Added Successfully');
-				redirect("Expense", 'refresh');
 			}
+			redirect("Expense", 'refresh');
 		}
 		else
-		{			           
+		{
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['vendors'] = $this->Crud_model->get('nz_vendors','');
 			if($id) {

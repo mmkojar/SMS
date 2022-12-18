@@ -96,7 +96,7 @@
                                     <td><?php echo $row->rate ?></td>
                                     <td><?php echo $row->total_amount ?></td>
                                     <td><?php echo $row->gst ?></td>
-                                    <td><?php echo $row->final_total ?></td>
+                                    <td><?php echo number_format($row->final_total,2) ?></td>
                                     <td><?php echo $row->date ?></td>
                                     <td><a class="btn btn-success btn-sm text-white" href="<?php echo base_url('selling/edit/'.$row->id) ?>"><i class="mdi mdi-pencil"></i>Edit</a>&nbsp;
                                     <a class="btn btn-danger btn-sm text-white" href="<?php echo base_url('selling/delete/'.$row->id.'/'.$row->item_id.'/'.$row->sub_item_id.'/'.$row->qty) ?>"><i class="mdi mdi-delete"></i>Delete</a></td>

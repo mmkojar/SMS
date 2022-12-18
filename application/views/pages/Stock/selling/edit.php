@@ -125,16 +125,21 @@
         $("#vendor_id").on('change', ()=> {
 
             var vid = $("#vendor_id").val();
-            $.ajax({
-                url:"<?php echo base_url('Vendors/gstapi') ?>",
-                method:"POST",
-                data:{vid:vid},
-                dataType:'json',
-                success:function(res)
-                {
-                    $("#gst_perc").val(res.gst_per);
-                }
-            })
+            if(vid) {
+                $.ajax({
+                    url:"<?php echo base_url('Vendors/gstapi') ?>",
+                    method:"POST",
+                    data:{vid:vid},
+                    dataType:'json',
+                    success:function(res)
+                    {
+                        $("#gst_perc").val(res.gst_per);
+                    }
+                })
+            }
+            else {
+                $("#gst_perc").val(0);
+            }
         })
 
     })
