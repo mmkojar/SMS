@@ -135,6 +135,7 @@
                     var  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                     const saletot = res.sell.map((res)=> Number(res.final_total)).reduce((total,count) => total+count,0);
                     const exptot = res.expense.map((res)=> Number(res.final_total)).reduce((total,count) => total+count,0);
+                    var profit = saletot-exptot;
                     var html = `
                         <thead>
                             <tr>
@@ -147,9 +148,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>${saletot}</td>
-                                <td>${exptot}</td>
-                                <td>${saletot-exptot.toFixed(2)}</td>
+                                <td>${saletot.toFixed(2)}</td>
+                                <td>${exptot.toFixed(2)}</td>
+                                <td>${profit.toFixed(2)}</td>
                                 <td>${mt ? months[Number(mt)-1] : '-'}</td>
                                 <td>${yr ? yr : '-'}</td>
                             </tr>
