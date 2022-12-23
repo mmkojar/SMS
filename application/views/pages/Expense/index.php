@@ -19,6 +19,7 @@
                                 <tr>
                                     <th>Sr.No</th>
                                     <th>Bill No</th>
+                                    <th>Vendor Name</th>
                                     <!-- <th>Item Name</th> -->
                                     <!-- <th>Qty</th> -->
                                     <th>Rate</th>
@@ -35,6 +36,7 @@
                                 <tr>
                                     <td><?php echo $sr_no; ?></td>
                                     <td><?php echo $row->bill_no; ?></td>
+                                    <td><?php echo $row->vendor_name; ?></td>
                                     <!-- <td><s?php echo $row->item ?></td>
                                     <td><s?php echo $row->qty ?></td> -->
                                     <td><?php echo $row->rate ?></td>
