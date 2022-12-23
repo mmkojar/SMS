@@ -25,7 +25,12 @@ class Expense extends CI_Controller {
 
 	public function index() {
 
-        $this->data['expenses'] = $this->Crud_model->get('expenses','');
+		$this->db->select("expenses.*,nz_vendors.name as vendor_name");
+		$this->db->from('expenses');
+		$this->db->join('nz_vendors',"nz_vendors.id = expenses.vendor_id","left");
+		$query=$this->db->get();
+		
+        $this->data['expenses'] = $query->result();
 		
 		$this->_render_page('pages/Expense/' . DIRECTORY_SEPARATOR . 'index', $this->data);
 	}
